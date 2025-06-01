@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>josegw</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Estilos basados en hazem.gg */
     body {
       margin: 0;
       padding: 0;
@@ -14,63 +14,74 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
     }
+
     .container {
       background-color: #1e1e1e;
-      padding: 40px;
+      padding: 30px 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      width: 300px;
+      width: 100%;
+      max-width: 400px;
       text-align: center;
     }
-    .container h1 {
+
+    h1 {
+      font-size: 28px;
       margin-bottom: 10px;
-      font-size: 32px;
-      color: #ffffff;
     }
-    .container p {
-      margin-bottom: 30px;
+
+    p.subtitle {
       font-size: 14px;
-      color: #bbbbbb;
+      color: #bbb;
+      margin-bottom: 30px;
     }
-    .input-field {
+
+    input, textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-bottom: 15px;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       background-color: #2a2a2a;
-      color: #ffffff;
+      color: #fff;
       font-size: 14px;
+      box-sizing: border-box;
     }
-    .input-field::placeholder {
-      color: #bbbbbb;
+
+    input::placeholder, textarea::placeholder {
+      color: #888;
     }
-    .send-button {
+
+    button {
       width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
+      padding: 12px;
       background-color: #5865F2;
-      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
       font-size: 16px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    .send-button:hover {
+
+    button:hover {
       background-color: #4752c4;
     }
-    .contact-email {
+
+    .email-link {
       margin-top: 20px;
-      font-size: 12px;
-      color: #bbbbbb;
+      font-size: 13px;
     }
-    .contact-email a {
+
+    .email-link a {
       color: #5865F2;
       text-decoration: none;
     }
-    .contact-email a:hover {
+
+    .email-link a:hover {
       text-decoration: underline;
     }
   </style>
@@ -78,59 +89,18 @@
 <body>
   <div class="container">
     <h1>josegw</h1>
-    <p>Send me a message through here</p>
-    <input type="text" id="username" class="input-field" placeholder="Enter your name">
-    <input type="text" id="message" class="input-field" placeholder="Enter your message">
-    <button class="send-button" onclick="sendMessage()">Send</button>
-    <div class="contact-email">
+    <p class="subtitle">Send me a message through here</p>
+    
+    <!-- Usa FormSubmit para recibir emails -->
+    <form action="https://formsubmit.co/hola@josegw.lol" method="POST">
+      <input type="text" name="name" placeholder="Your name" required>
+      <textarea name="message" placeholder="Your message" rows="4" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+
+    <div class="email-link">
       <a href="mailto:hola@josegw.lol">hola@josegw.lol</a>
     </div>
   </div>
-
-  <script>
-    function sendMessage() {
-      const username = document.getElementById('username').value.trim();
-      const message = document.getElementById('message').value.trim();
-
-      if (!username || !message) {
-        alert('Please enter both your name and message.');
-        return;
-      }
-
-      // Reemplaza esta URL con la de tu webhook de Discord
-      const webhookUrl = 'YOUR_DISCORD_WEBHOOK_URL';
-
-      const payload = {
-        embeds: [
-          {
-            title: username,
-            description: message,
-            color: 0x5865F2
-          }
-        ]
-      };
-
-      fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      })
-      .then(response => {
-        if (response.ok) {
-          alert('Message sent successfully!');
-          document.getElementById('username').value = '';
-          document.getElementById('message').value = '';
-        } else {
-          alert('Failed to send message.');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while sending the message.');
-      });
-    }
-  </script>
 </body>
 </html>
