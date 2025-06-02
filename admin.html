@@ -14,13 +14,14 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      min-height: 100vh;
       text-align: center;
       padding: 20px;
-      min-height: 100vh;
     }
 
-    h1, h2 {
-      margin: 1rem 0 0.5rem;
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
 
     button {
@@ -32,7 +33,6 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s;
-      margin-top: 1rem;
     }
 
     button:hover {
@@ -42,22 +42,31 @@
     .panel {
       display: none;
       margin-top: 2rem;
-      width: 100%;
       max-width: 600px;
-    }
-
-    .stat {
-      margin: 10px 0;
-      font-size: 1.1rem;
-    }
-
-    input[type="text"] {
-      padding: 8px;
-      font-size: 1rem;
       width: 100%;
-      margin-top: 10px;
-      border-radius: 6px;
-      border: none;
+    }
+
+    .info-block {
+      background-color: #1a1a1d;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 10px 0;
+      text-align: left;
+    }
+
+    .info-block h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .info-block {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
@@ -69,42 +78,40 @@
 
   <div class="panel" id="admin-panel">
     <h2>Bienvenido, admin 👑</h2>
-
-    <div class="stat" id="uptime">Uptime: Calculando...</div>
-    <div class="stat" id="ping">Ping: Calculando...</div>
-    <div class="stat" id="formCount">Formularios enviados: 0</div>
-
-    <button onclick="resetCounter()">Resetear contador</button>
-
-    <h2 style="margin-top:2rem;">Editar texto de subtítulo</h2>
-    <input type="text" id="subtitleInput" placeholder="Nuevo texto para el sitio..." />
-    <button onclick="changeSubtitle()">Actualizar</button>
+    <div class="info-block" id="site-status">
+      <h2>Latencia del sitio</h2>
+      <p>Midiento...</p>
+    </div>
+    <div class="info-block" id="visitor-info">
+      <h2>Información del visitante</h2>
+      <p>Cargando IP y localización...</p>
+    </div>
+    <div class="info-block" id="browser-info">
+      <h2>Recursos del navegador</h2>
+      <p>Analizando uso de recursos...</p>
+    </div>
   </div>
 
   <script>
-    const YOUR_CLIENT_ID = "1378952738360131604";
+    const CLIENT_ID = "1378952738360131604";
+    const CLIENT_SECRET = "Ypojy6VabbXg3RSDLvKKG1cpUp3t5Pln"; // ⚠️ Usa esto solo en backends seguros
     const REDIRECT_URI = "https://josegw.lol/admin";
-    const ADMIN_ID = "1307562402958676048"; // Reemplaza con tu Discord user ID
-    const CLIENT_SECRET = "Ypojy6VabbXg3RSDLvKKG1cpUp3t5Pln";
-
-    let startTime = Date.now();
+    const ADMIN_ID = "1307562402958676048";
 
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
 
     document.getElementById("login-btn").addEventListener("click", () => {
-      const discordOauthURL = `https://discord.com/api/oauth2/authorize?client_id=${YOUR_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`;
+      const discordOauthURL = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`;
       window.location.href = discordOauthURL;
     });
 
     async function exchangeCodeForToken(code) {
       const response = await fetch("https://discord.com/api/oauth2/token", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
-          client_id: YOUR_CLIENT_ID,
+          client_id: CLIENT_ID,
           client_secret: CLIENT_SECRET,
           grant_type: "authorization_code",
           code: code,
@@ -112,55 +119,47 @@
           scope: "identify"
         })
       });
-
       return await response.json();
     }
 
     async function getUserInfo(token) {
       const response = await fetch("https://discord.com/api/users/@me", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        headers: { Authorization: `Bearer ${token}` }
       });
       return await response.json();
     }
 
-    function showUptime() {
-      const now = Date.now();
-      const diff = now - startTime;
-      const seconds = Math.floor((diff / 1000) % 60);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const hours = Math.floor((diff / (1000 * 60 * 60)));
-      document.getElementById("uptime").textContent = `Uptime: ${hours}h ${minutes}m ${seconds}s`;
-    }
+    async function showAdminPanel() {
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("admin-panel").style.display = "block";
 
-    function simulatePing() {
+      // Latencia del sitio
       const start = performance.now();
-      fetch("https://discord.com/api/users/@me", { method: "HEAD", mode: "no-cors" })
-        .finally(() => {
-          const end = performance.now();
-          const ping = Math.floor(end - start);
-          document.getElementById("ping").textContent = `Ping estimado: ${ping} ms`;
-        });
-    }
-
-    function loadFormCount() {
-      const count = localStorage.getItem("formCount") || 0;
-      document.getElementById("formCount").textContent = `Formularios enviados: ${count}`;
-    }
-
-    function resetCounter() {
-      localStorage.setItem("formCount", 0);
-      loadFormCount();
-      alert("Contador reseteado.");
-    }
-
-    function changeSubtitle() {
-      const text = document.getElementById("subtitleInput").value;
-      if (text) {
-        localStorage.setItem("siteSubtitle", text);
-        alert("Texto actualizado (usa este valor en el sitio público si quieres usar localStorage).");
+      try {
+        await fetch("/", { method: "HEAD", cache: "no-store" });
+        const latency = Math.round(performance.now() - start);
+        document.querySelector("#site-status p").innerText = `${latency} ms`;
+      } catch {
+        document.querySelector("#site-status p").innerText = "No disponible.";
       }
+
+      // IP + país
+      try {
+        const ipRes = await fetch("https://ipapi.co/json/");
+        const ipData = await ipRes.json();
+        document.querySelector("#visitor-info p").innerText = `IP: ${ipData.ip}, País: ${ipData.country_name}, ISP: ${ipData.org}`;
+      } catch {
+        document.querySelector("#visitor-info p").innerText = "No se pudo obtener la IP.";
+      }
+
+      // Info navegador
+      const mem = performance.memory || {};
+      const usage = `
+        Navegador: ${navigator.userAgent}
+        Memoria usada: ${(mem.usedJSHeapSize / 1048576).toFixed(2) || 'Desconocida'} MB
+        Memoria total: ${(mem.totalJSHeapSize / 1048576).toFixed(2) || 'Desconocida'} MB
+      `.trim();
+      document.querySelector("#browser-info p").innerText = usage;
     }
 
     (async () => {
@@ -170,11 +169,7 @@
           const userInfo = await getUserInfo(tokenData.access_token);
 
           if (userInfo.id === ADMIN_ID) {
-            document.getElementById("login-section").style.display = "none";
-            document.getElementById("admin-panel").style.display = "block";
-            setInterval(showUptime, 1000);
-            simulatePing();
-            loadFormCount();
+            await showAdminPanel();
           } else {
             alert("No tienes permiso para acceder.");
           }
