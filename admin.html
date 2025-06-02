@@ -1,421 +1,356 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>Admin Panel - josegw.lol</title>
-  <style>
-    /* Reset & base */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0e0e10;
-      color: #eee;
-      height: 100vh;
-      overflow-x: hidden;
-    }
-    a {
-      color: #5865f2;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    button {
-      cursor: pointer;
-      background-color: #5865f2;
-      border: none;
-      color: white;
-      padding: 10px 18px;
-      font-size: 1rem;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #4752c4;
-    }
-    h1, h2 {
-      margin: 0;
-      font-weight: 700;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.3rem;
-    }
-    h2 {
-      font-size: 1.25rem;
-      margin-bottom: 0.6rem;
-    }
-    /* Layout */
-    #container {
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
-    #sidebar {
-      background-color: #1f1f27;
-      width: 240px;
-      min-width: 240px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      transition: transform 0.3s ease;
-      z-index: 1000;
-    }
-    #sidebar.hide {
-      transform: translateX(-100%);
-    }
-    #sidebar h2 {
-      margin-bottom: 1rem;
-      user-select: none;
-    }
-    #sidebar button.menu-close {
-      margin-bottom: 1rem;
-      background-color: transparent;
-      color: #bbb;
-      font-weight: bold;
-      font-size: 1.1rem;
-      text-align: left;
-      padding: 5px 0;
-      border-radius: 0;
-      cursor: pointer;
-    }
-    #sidebar button.menu-close:hover {
-      color: white;
-    }
-    #sidebar nav {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    #sidebar nav button {
-      background-color: transparent;
-      color: #bbb;
-      text-align: left;
-      font-weight: 600;
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: none;
-      transition: background-color 0.2s ease;
-    }
-    #sidebar nav button.active,
-    #sidebar nav button:hover {
-      background-color: #5865f2;
-      color: white;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Admin Panel - josegw.lol</title>
+<style>
+  /* Reset y básicos */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0e0e10;
+    color: #eee;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-    main {
-      flex-grow: 1;
-      padding: 24px 32px;
-      overflow-y: auto;
-      background-color: #0e0e10;
-    }
+  header {
+    background: #18191c;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
 
-    /* Hamburger */
-    #hamburger {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background-color: #5865f2;
-      border: none;
-      color: white;
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 1100;
-      display: none;
-    }
+  /* Hamburguer Menu */
+  .hamburger {
+    cursor: pointer;
+    width: 25px;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .hamburger span {
+    display: block;
+    height: 3px;
+    background: #5865F2;
+    border-radius: 2px;
+  }
 
-    /* Section content */
-    section {
-      max-width: 700px;
-      margin: auto;
+  nav {
+    background: #18191c;
+    width: 220px;
+    position: fixed;
+    top: 0;
+    left: -220px;
+    height: 100vh;
+    padding-top: 60px;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    z-index: 10;
+  }
+  nav.open {
+    left: 0;
+  }
+  nav ul {
+    list-style: none;
+    padding: 0 1rem;
+    margin: 0;
+  }
+  nav ul li {
+    margin-bottom: 1rem;
+  }
+  nav ul li button {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    background: #5865F2;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.2s;
+  }
+  nav ul li button:hover {
+    background: #4752c4;
+  }
+
+  main {
+    flex-grow: 1;
+    padding: 1.5rem;
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+  }
+  main.shifted {
+    margin-left: 220px;
+  }
+
+  section {
+    margin-bottom: 2rem;
+  }
+  section h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #5865F2;
+    padding-bottom: 0.3rem;
+  }
+  p {
+    font-size: 1rem;
+    margin: 0.3rem 0;
+  }
+
+  /* Botones funcionales */
+  button.action-btn {
+    background: #43b581;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  button.action-btn:hover {
+    background: #369d6b;
+  }
+
+  /* Login container */
+  #login-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #login-section button {
+    background-color: #5865F2;
+    border: none;
+    color: white;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  #login-section button:hover {
+    background-color: #4752c4;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    nav {
+      width: 180px;
+      left: -180px;
     }
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #222;
+    main.shifted {
+      margin-left: 180px;
     }
-    .info-row:last-child {
-      border-bottom: none;
-    }
-    .info-label {
-      font-weight: 600;
-      color: #bbb;
-    }
-    .info-value {
-      font-family: monospace;
-      user-select: text;
-    }
-    /* Responsive */
-    @media (max-width: 768px) {
-      #sidebar {
-        position: fixed;
-        height: 100vh;
-        top: 0;
-        left: 0;
-      }
-      #hamburger {
-        display: block;
-      }
-      main {
-        padding: 24px 16px;
-      }
-    }
-    /* Dark / Light toggle */
-    body.light {
-      background-color: #f0f0f0;
-      color: #222;
-    }
-    body.light #sidebar {
-      background-color: #ddd;
-      color: #222;
-    }
-    body.light #sidebar nav button {
-      color: #333;
-    }
-    body.light #sidebar nav button.active,
-    body.light #sidebar nav button:hover {
-      background-color: #5865f2;
-      color: white;
-    }
-    body.light button {
-      background-color: #5865f2;
-      color: white;
-    }
-    body.light button:hover {
-      background-color: #4752c4;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <button id="hamburger" aria-label="Toggle menu">&#9776;</button>
-  <div id="container">
-    <aside id="sidebar" class="hide" aria-label="Menu de administración">
-      <button class="menu-close" aria-label="Cerrar menú">✕ Cerrar</button>
-      <h2>Menú Admin</h2>
-      <nav>
-        <button class="menu-btn active" data-section="info">Información</button>
-        <button class="menu-btn" data-section="tools">Herramientas</button>
-      </nav>
-    </aside>
 
-    <main>
-      <h1>Panel Admin</h1>
-      <section id="info-section" style="display: block;">
-        <h2>Información del sitio</h2>
-        <div class="info-row"><span class="info-label">Uptime:</span> <span class="info-value" id="uptime">Cargando...</span></div>
-        <div class="info-row"><span class="info-label">Ping (latencia):</span> <span class="info-value" id="ping">Cargando...</span></div>
-        <div class="info-row"><span class="info-label">Estado conexión:</span> <span class="info-value" id="status">Comprobando...</span></div>
-        <div class="info-row"><span class="info-label">Visitas esta sesión:</span> <span class="info-value" id="visitas">0</span></div>
-        <div class="info-row"><span class="info-label">Tamaño DOM (elementos):</span> <span class="info-value" id="domSize">Cargando...</span></div>
-        <div class="info-row"><span class="info-label">Navegador:</span> <span class="info-value" id="userAgent">Cargando...</span></div>
-      </section>
+<header>
+  <h1>Admin Panel</h1>
+  <div class="hamburger" id="hamburger" aria-label="Toggle menu" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+</header>
 
-      <section id="tools-section" style="display: none;">
-        <h2>Herramientas de administración</h2>
-        <div style="display:flex; flex-direction: column; gap: 12px; max-width: 320px;">
-          <button id="toggle-theme">Cambiar modo oscuro/claro</button>
-          <button id="clear-cache">Limpiar cache local</button>
-          <button id="reload-page">Recargar página</button>
-          <button id="logout">Cerrar sesión</button>
-          <button id="copy-uptime">Copiar uptime al portapapeles</button>
-          <button id="copy-ping">Copiar ping al portapapeles</button>
-        </div>
-      </section>
-    </main>
+<nav id="menu">
+  <ul>
+    <li><button id="btn-uptime">Ver Uptime</button></li>
+    <li><button id="btn-latency">Ping Backend</button></li>
+    <li><button id="btn-info">Info Sistema</button></li>
+    <li><button id="btn-restart">Reiniciar Backend</button></li>
+    <li><button id="btn-logout">Cerrar Sesión</button></li>
+  </ul>
+</nav>
+
+<main id="main-content">
+  <div id="login-section">
+    <button id="login-btn">Iniciar sesión con Discord</button>
   </div>
 
-  <script>
-    // --- Variables globales ---
-    const ADMIN_ID = "1307562402958676048";
+  <div id="admin-section" style="display:none;">
+    <section id="uptime-section" style="display:none;">
+      <h2>Uptime del servidor</h2>
+      <p id="uptime-text">Cargando...</p>
+    </section>
 
-    // Timer para uptime
-    let startTime = Date.now();
+    <section id="latency-section" style="display:none;">
+      <h2>Ping al backend</h2>
+      <p id="latency-text">Cargando...</p>
+    </section>
 
-    // Referencias DOM
-    const uptimeEl = document.getElementById("uptime");
-    const pingEl = document.getElementById("ping");
-    const statusEl = document.getElementById("status");
-    const visitasEl = document.getElementById("visitas");
-    const domSizeEl = document.getElementById("domSize");
-    const userAgentEl = document.getElementById("userAgent");
-    const infoSection = document.getElementById("info-section");
-    const toolsSection = document.getElementById("tools-section");
+    <section id="info-section" style="display:none;">
+      <h2>Información del sistema</h2>
+      <pre id="info-text" style="white-space: pre-wrap; background:#1a1a1a; padding:1rem; border-radius:6px; max-height:300px; overflow-y:auto;"></pre>
+    </section>
 
-    // Menu botones
-    const menuButtons = document.querySelectorAll(".menu-btn");
-    const sidebar = document.getElementById("sidebar");
-    const hamburger = document.getElementById("hamburger");
-    const menuCloseBtn = document.querySelector("#sidebar .menu-close");
+    <section id="restart-section" style="display:none;">
+      <h2>Reiniciar Backend</h2>
+      <button class="action-btn" id="restart-btn">Reiniciar Ahora</button>
+      <p id="restart-msg"></p>
+    </section>
+  </div>
+</main>
 
-    // Show/hide sidebar en móvil
-    hamburger.addEventListener("click", () => {
-      sidebar.classList.toggle("hide");
+<script>
+  const CLIENT_ID = "1378952738360131604";
+  const REDIRECT_URI = "https://josegw.lol/admin.html"; // o admin si tienes rewrite
+  const ADMIN_ID = "1307562402958676048";
+  const BACKEND_URL = "https://josegwlol-backend.onrender.com";
+
+  const loginSection = document.getElementById("login-section");
+  const adminSection = document.getElementById("admin-section");
+  const hamburger = document.getElementById("hamburger");
+  const menu = document.getElementById("menu");
+  const mainContent = document.getElementById("main-content");
+
+  // Toggle menu hamburguesa
+  function toggleMenu() {
+    menu.classList.toggle("open");
+    mainContent.classList.toggle("shifted");
+  }
+  hamburger.addEventListener("click", toggleMenu);
+  hamburger.addEventListener("keydown", e => {
+    if(e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleMenu();
+    }
+  });
+
+  // Parse URL code param from Discord OAuth2 redirect
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get("code");
+
+  async function exchangeCodeForToken(code) {
+    // Exchange code for token via backend (proxy)
+    const response = await fetch(`${BACKEND_URL}/oauth/token`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ code, redirect_uri: REDIRECT_URI })
     });
-    menuCloseBtn.addEventListener("click", () => {
-      sidebar.classList.add("hide");
+    return response.json();
+  }
+
+  async function getUserInfo(token) {
+    // Get user info from backend proxy
+    const response = await fetch(`${BACKEND_URL}/oauth/userinfo`, {
+      headers: { Authorization: `Bearer ${token}` }
     });
+    return response.json();
+  }
 
-    // Cambiar sección
-    menuButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        menuButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        const sec = btn.getAttribute("data-section");
-        if(sec === "info"){
-          infoSection.style.display = "block";
-          toolsSection.style.display = "none";
-        } else {
-          infoSection.style.display = "none";
-          toolsSection.style.display = "block";
-        }
-        // ocultar sidebar en móvil al seleccionar
-        if(window.innerWidth <= 768){
-          sidebar.classList.add("hide");
-        }
-      });
-    });
-
-    // Función uptime formateada hh:mm:ss
-    function formatUptime(ms){
-      let totalSeconds = Math.floor(ms / 1000);
-      let hours = Math.floor(totalSeconds / 3600);
-      let minutes = Math.floor((totalSeconds % 3600) / 60);
-      let seconds = totalSeconds % 60;
-      return `${String(hours).padStart(2,"0")}:${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+  async function init() {
+    if (!code) {
+      loginSection.style.display = "flex";
+      adminSection.style.display = "none";
+      return;
     }
 
-    // Actualizar uptime cada segundo
-    function updateUptime(){
-      let elapsed = Date.now() - startTime;
-      uptimeEl.textContent = formatUptime(elapsed);
-    }
-    setInterval(updateUptime, 1000);
-    updateUptime();
-
-    // Obtener tamaño DOM (número de elementos)
-    function updateDOMSize(){
-      domSizeEl.textContent = document.getElementsByTagName("*").length;
-    }
-    updateDOMSize();
-
-    // Mostrar user agent
-    userAgentEl.textContent = navigator.userAgent;
-
-    // Contar visitas en sesión (sessionStorage)
-    function updateVisitas(){
-      let count = sessionStorage.getItem("visitasSesion") || 0;
-      count = Number(count) + 1;
-      sessionStorage.setItem("visitasSesion", count);
-      visitasEl.textContent = count;
-    }
-    updateVisitas();
-
-    // Verificar conexión (fetch a google.com)
-    async function checkStatus(){
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        const resp = await fetch("https://www.google.com/favicon.ico", {signal: controller.signal, mode:"no-cors"});
-        clearTimeout(timeoutId);
-        statusEl.textContent = "Online";
-        statusEl.style.color = "#4CAF50";
-      } catch(e){
-        statusEl.textContent = "Offline";
-        statusEl.style.color = "#E53935";
+    try {
+      // 1. Exchange code for token
+      const tokenData = await exchangeCodeForToken(code);
+      if (!tokenData.access_token) {
+        throw new Error("Token no recibido");
       }
+
+      // 2. Get user info
+      const userInfo = await getUserInfo(tokenData.access_token);
+      if (userInfo.id !== ADMIN_ID) {
+        alert("No tienes permiso para acceder.");
+        window.history.replaceState({}, document.title, "/admin.html");
+        loginSection.style.display = "flex";
+        adminSection.style.display = "none";
+        return;
+      }
+
+      // Usuario autorizado
+      loginSection.style.display = "none";
+      adminSection.style.display = "block";
+
+      // Limpiar URL del código para evitar reuso
+      window.history.replaceState({}, document.title, "/admin.html");
+
+      // Carga inicial de datos
+      showUptime();
+      showLatency();
+      showInfo();
+
+      // Mostrar secciones
+      document.getElementById("uptime-section").style.display = "block";
+      document.getElementById("latency-section").style.display = "block";
+      document.getElementById("info-section").style.display = "block";
+      document.getElementById("restart-section").style.display = "block";
+
+    } catch (error) {
+      alert("Error en autenticación: " + error.message);
+      loginSection.style.display = "flex";
+      adminSection.style.display = "none";
     }
-    checkStatus();
+  }
 
-    // Ping real a google (mide tiempo fetch)
-    async function ping(){
-      const url = "https://www.google.com/favicon.ico";
-      let start = performance.now();
-      try {
-        await fetch(url, {mode:"no-cors"});
-        let end = performance.now();
-        let ms = Math.round(end - start);
-        pingEl.textContent = ms + " ms";
-      } catch {
-        pingEl.textContent = "Error";
-      }
+  async function showUptime() {
+    const res = await fetch(`${BACKEND_URL}/uptime`);
+    const data = await res.json();
+    document.getElementById("uptime-text").textContent = `Tiempo activo: ${data.uptime}`;
+  }
+
+  async function showLatency() {
+    const start = performance.now();
+    await fetch(`${BACKEND_URL}/ping`);
+    const end = performance.now();
+    const latency = (end - start).toFixed(2);
+    document.getElementById("latency-text").textContent = `Latencia: ${latency} ms`;
+  }
+
+  async function showInfo() {
+    const res = await fetch(`${BACKEND_URL}/info`);
+    const data = await res.json();
+    document.getElementById("info-text").textContent = JSON.stringify(data, null, 2);
+  }
+
+  async function restartBackend() {
+    if(!confirm("¿Seguro que quieres reiniciar el backend?")) return;
+    const res = await fetch(`${BACKEND_URL}/restart`, { method: "POST" });
+    if(res.ok) {
+      document.getElementById("restart-msg").textContent = "¡Backend reiniciado con éxito!";
+    } else {
+      document.getElementById("restart-msg").textContent = "Error al reiniciar backend.";
     }
-    ping();
+  }
 
-    // Actualizar ping cada 30 seg
-    setInterval(ping, 30000);
+  // Botones
+  document.getElementById("login-btn").addEventListener("click", () => {
+    const discordAuthURL = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`;
+    window.location.href = discordAuthURL;
+  });
+  document.getElementById("btn-uptime").addEventListener("click", showUptime);
+  document.getElementById("btn-latency").addEventListener("click", showLatency);
+  document.getElementById("btn-info").addEventListener("click", showInfo);
+  document.getElementById("btn-restart").addEventListener("click", restartBackend);
+  document.getElementById("btn-logout").addEventListener("click", () => {
+    // Borra código de la URL y recarga
+    window.history.replaceState({}, document.title, "/admin.html");
+    location.reload();
+  });
 
-    // Tema (claro/oscuro)
-    const themeBtn = document.getElementById("toggle-theme");
-    function setTheme(theme){
-      if(theme === "light"){
-        document.body.classList.add("light");
-        localStorage.setItem("theme", "light");
-      } else {
-        document.body.classList.remove("light");
-        localStorage.setItem("theme", "dark");
-      }
-    }
-    // Cargar tema guardado
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    setTheme(savedTheme);
+  init();
+</script>
 
-    themeBtn.addEventListener("click", () => {
-      if(document.body.classList.contains("light")){
-        setTheme("dark");
-      } else {
-        setTheme("light");
-      }
-    });
-
-    // Limpiar cache localStorage y sessionStorage
-    const clearCacheBtn = document.getElementById("clear-cache");
-    clearCacheBtn.addEventListener("click", () => {
-      if(confirm("¿Seguro que quieres limpiar cache local (localStorage y sessionStorage)?")){
-        localStorage.clear();
-        sessionStorage.clear();
-        alert("Cache local limpiada. Recargando página.");
-        location.reload();
-      }
-    });
-
-    // Recargar página
-    document.getElementById("reload-page").addEventListener("click", () => {
-      location.reload();
-    });
-
-    // Cerrar sesión (borrar localStorage y recargar)
-    document.getElementById("logout").addEventListener("click", () => {
-      localStorage.clear();
-      sessionStorage.clear();
-      alert("Sesión cerrada.");
-      // Aquí puedes redirigir a login si quieres
-      location.reload();
-    });
-
-    // Copiar uptime
-    document.getElementById("copy-uptime").addEventListener("click", () => {
-      navigator.clipboard.writeText(uptimeEl.textContent).then(() => {
-        alert("Uptime copiado al portapapeles");
-      });
-    });
-
-    // Copiar ping
-    document.getElementById("copy-ping").addEventListener("click", () => {
-      navigator.clipboard.writeText(pingEl.textContent).then(() => {
-        alert("Ping copiado al portapapeles");
-      });
-    });
-
-    // --- Aquí puedes agregar más funciones si quieres ---
-  </script>
 </body>
 </html>
