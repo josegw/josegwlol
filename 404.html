@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Page Not Found</title>
+  <style>
+    :root {
+      --bg: #0e0e0e;
+      --primary: #ffffff;
+      --accent: #5865f2;
+      --subtle: #aaaaaa;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--primary);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      color: var(--subtle);
+      margin-bottom: 1.5rem;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: bold;
+      background-color: #1a1a1a;
+      padding: 0.7rem 1.2rem;
+      border-radius: 8px;
+      transition: background 0.2s ease-in-out;
+    }
+
+    a:hover {
+      background-color: #2a2a2a;
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      h2 {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>404</h1>
+    <h2>This page doesn't exist.</h2>
+    <a href="/">← Back to homepage</a>
+  </div>
+</body>
+</html>
