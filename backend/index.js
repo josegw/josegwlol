@@ -3,79 +3,74 @@ import os from "os";
 import process from "process";
 
 const app = express();
-const PORT = process.env.PORT || 10000;
+const PORT = 10000;
 
 app.use(express.json());
 
 let logs = [];
 
-// Función para agregar logs simples
 function addLog(msg) {
-  const timestamp = new Date().toISOString();
-  const logEntry = `[${timestamp}] ${msg}`;
-  logs.push(logEntry);
-  if (logs.length > 100) logs.shift(); // máximo 100 logs guardados
-  console.log(logEntry);
+  const now = new Date().toISOString();
+  logs.push(`[${now}] ${msg}`);
+  if (logs.length > 100) logs.shift();
+  console.log(msg);
 }
 
-// Endpoint para info admin
+// Endpoint para obtener info del servidor
 app.get("/api/admin-info", (req, res) => {
-  const uptime = process.uptime();
-  const memUsage = process.memoryUsage();
-  const cpuCount = os.cpus().length;
-  const now = new Date();
-
-  addLog("Admin info requested");
-
-  res.json({
-    uptimeSeconds: Math.floor(uptime),
-    memory: {
-      rssMB: (memUsage.rss / 1024 / 1024).toFixed(2),
-      heapTotalMB: (memUsage.heapTotal / 1024 / 1024).toFixed(2),
-      heapUsedMB: (memUsage.heapUsed / 1024 / 1024).toFixed(2),
-    },
-    cpuCount,
-    serverTime: now.toISOString(),
-    nodeVersion: process.version,
-  });
+  try {
+    addLog("Petición de info servidor");
+    const uptime = process.uptime();
+    const mem = process.memoryUsage();
+    res.json({
+      uptimeSeconds: Math.floor(uptime),
+      memory: {
+        rssMB: (mem.rss / 1024 / 1024).toFixed(2),
+        heapUsedMB: (mem.heapUsed / 1024 / 1024).toFixed(2),
+      },
+      cpuCount: os.cpus().length,
+      serverTime: new Date().toISOString(),
+      nodeVersion: process.version,
+    });
+  } catch (e) {
+    res.status(500).json({ error: "Error al obtener info" });
+  }
 });
 
 // Endpoint para obtener logs
 app.get("/api/logs", (req, res) => {
+  addLog("Petición de logs");
   res.json({ logs });
-  addLog("Logs requested");
+});
+
+// Endpoint para enviar mensaje (simulado)
+app.post("/api/send-message", (req, res) => {
+  const { message } = req.body;
+  if (!message || message.trim() === "") {
+    return res.status(400).json({ error: "Mensaje vacío" });
+  }
+  addLog(`Mensaje global: ${message}`);
+  res.json({ message: "Mensaje recibido (simulado)." });
+});
+
+// Endpoint para obtener lista de usuarios (simulado)
+app.get("/api/users", (req, res) => {
+  addLog("Petición lista usuarios");
+  res.json({
+    users: [
+      { id: "1307562402958676048", username: "TuUsuario#1234", status: "online" },
+      { id: "987654321098765432", username: "Amigo#4321", status: "offline" },
+    ],
+  });
 });
 
 // Endpoint para reiniciar servidor (simulado)
 app.post("/api/restart", (req, res) => {
-  addLog("Restart requested");
-  res.json({ message: "Servidor se reiniciará (simulado)." });
-  // Si quieres reiniciar de verdad, tendrías que hacer un shutdown o reinicio de proceso:
-  // process.exit(0);
-});
-
-// Endpoint para enviar mensaje global (simulado)
-app.post("/api/send-message", (req, res) => {
-  const { message } = req.body;
-  if (!message) {
-    res.status(400).json({ error: "Mensaje requerido" });
-    return;
-  }
-  addLog(`Mensaje enviado: ${message}`);
-  res.json({ message: "Mensaje enviado (simulado)." });
-});
-
-// Simular lista de usuarios conectados
-app.get("/api/users", (req, res) => {
-  const users = [
-    { id: "1307562402958676048", username: "TuUsuario#1234", status: "online" },
-    { id: "111222333444555666", username: "UsuarioFake#5678", status: "offline" },
-  ];
-  addLog("Usuarios listados");
-  res.json({ users });
+  addLog("Petición reinicio servidor");
+  res.json({ message: "Reinicio simulado ejecutado." });
+  // Aquí podrías agregar lógica real para reiniciar si quieres
 });
 
 app.listen(PORT, () => {
-  console.log(`Admin backend running on port ${PORT}`);
-  addLog(`Servidor iniciado en puerto ${PORT}`);
+  console.log(`Servidor backend corriendo en puerto ${PORT}`);
 });
