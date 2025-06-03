@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>josegw</title>
+
+  <!-- Enlazamos el CSS -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- 1) Logo con el mismo estilo tipográfico que “hzm” -->
+    <div class="logo">josegw</div>
+
+    <!-- 2) Formulario que envía a Formspree -->
+    <!-- Reemplaza “your-form-id” por tu ID real de Formspree -->
+    <form action="https://formspree.io/f/your-form-id" method="POST">
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required
+      />
+
+      <textarea
+        name="message"
+        placeholder="Mensaje"
+        rows="4"
+        required
+      ></textarea>
+
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</body>
+</html>
