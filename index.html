@@ -1,37 +1,101 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>josegw</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preload" href="fonts/hzmfont.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+  <style>
+    @font-face {
+      font-family: 'HZMLogo';
+      src: url('fonts/hzmfont.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
 
-  <!-- Enlazamos el CSS -->
-  <link rel="stylesheet" href="styles.css" />
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0c0f1a, #0a1a2f); /* dark blue gradient */
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .logo {
+      font-family: 'HZMLogo', sans-serif;
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    input, textarea {
+      padding: 12px;
+      background-color: transparent;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      color: white;
+      font-size: 16px;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #999;
+    }
+
+    button {
+      padding: 12px;
+      background: #0a0e20; /* very dark blue */
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .email-link {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .email-link a {
+      color: #999;
+      text-decoration: none;
+    }
+
+    .email-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <!-- 1) Logo con el mismo estilo tipográfico que “hzm” -->
-    <div class="logo">josegw</div>
-
-    <!-- 2) Formulario que envía a Formspree -->
-    <!-- Reemplaza “your-form-id” por tu ID real de Formspree -->
-    <form action="https://formspree.io/f/your-form-id" method="POST">
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        required
-      />
-
-      <textarea
-        name="message"
-        placeholder="Mensaje"
-        rows="4"
-        required
-      ></textarea>
-
-      <button type="submit">Enviar</button>
-    </form>
+  <div class="logo">josegw</div>
+  <div class="subtitle">send me a message through here</div>
+  <form action="https://formspree.io/f/xrbkggay" method="POST">
+    <input type="email" name="email" placeholder="Email" required />
+    <textarea name="message" placeholder="Message" rows="5" required></textarea>
+    <button type="submit">Send</button>
+  </form>
+  <div class="email-link">
+    <a href="mailto:hola@josegw.lol?subject=Hola%20%F0%9F%91%8B">or email me at hola@josegw.lol</a>
   </div>
 </body>
 </html>
