@@ -3,198 +3,144 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Panel Admin</title>
+<title>Panel Admin Funcional</title>
 <style>
-  body {
-    margin: 0; font-family: Arial, sans-serif;
-    background: #121214; color: white;
-    display: flex; flex-direction: column; min-height: 100vh;
-  }
-  header {
-    background: #232329; padding: 10px 20px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  header h1 { margin: 0; font-size: 1.5rem; }
-  button {
-    background: #5865F2; border: none; color: white;
-    padding: 10px 16px; border-radius: 6px;
-    cursor: pointer;
-  }
+  body { background: #121214; color: white; font-family: Arial, sans-serif; margin: 0; padding: 0; }
+  header { background: #232329; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+  button { background: #5865F2; border: none; padding: 10px 15px; color: white; border-radius: 6px; cursor: pointer; }
   button:hover { background: #4752c4; }
-  nav {
-    background: #2a2a2f;
-    display: none; flex-direction: column;
-    padding: 10px;
-  }
-  nav.active { display: flex; }
-  nav button {
-    margin: 6px 0;
-    text-align: left;
-  }
-  main {
-    flex: 1; padding: 20px;
-  }
-  .info-box {
-    background: #1f1f23; padding: 15px; border-radius: 8px;
-    margin-bottom: 15px;
-  }
-  pre {
-    background: #222; padding: 10px; border-radius: 6px;
-    max-height: 150px; overflow-y: auto;
-  }
-  @media (min-width: 600px) {
-    nav {
-      display: flex !important;
-      flex-direction: row;
-      justify-content: center;
-      gap: 15px;
-    }
-    nav button {
-      margin: 0;
-    }
-  }
+  nav { background: #2a2a2f; padding: 10px 20px; display: flex; gap: 15px; flex-wrap: wrap; }
+  nav button { flex: 1 1 150px; }
+  main { padding: 20px; }
+  section { margin-bottom: 20px; }
+  .info-box { background: #1f1f23; padding: 15px; border-radius: 8px; }
+  textarea { width: 100%; padding: 8px; border-radius: 6px; border: none; resize: vertical; }
+  pre { background: #222; padding: 10px; border-radius: 6px; max-height: 150px; overflow-y: auto; white-space: pre-wrap; word-wrap: break-word;}
 </style>
 </head>
 <body>
 
 <header>
   <h1>Panel Admin</h1>
-  <button id="menu-toggle" aria-label="Mostrar menú">☰</button>
-  <button id="logout-btn" style="display:none;">Cerrar sesión</button>
+  <button id="logout-btn">Cerrar sesión</button>
 </header>
 
-<nav id="menu">
-  <button data-tool="info">Información Servidor</button>
-  <button data-tool="users">Usuarios Conectados</button>
-  <button data-tool="logs">Logs</button>
-  <button data-tool="sendmsg">Enviar Mensaje</button>
-  <button data-tool="restart">Reiniciar Servidor</button>
+<nav>
+  <button id="btn-info">Información Servidor</button>
+  <button id="btn-users">Usuarios Conectados</button>
+  <button id="btn-logs">Logs</button>
+  <button id="btn-sendmsg">Enviar Mensaje</button>
+  <button id="btn-restart">Reiniciar Servidor</button>
 </nav>
 
 <main>
-  <section id="info" class="tool-section">
+  <section id="info-section" style="display:none;">
     <h2>Información del Servidor</h2>
     <div class="info-box" id="server-info">Cargando...</div>
   </section>
 
-  <section id="users" class="tool-section" style="display:none;">
+  <section id="users-section" style="display:none;">
     <h2>Usuarios Conectados</h2>
     <div class="info-box" id="user-list">Cargando...</div>
   </section>
 
-  <section id="logs" class="tool-section" style="display:none;">
-    <h2>Logs Recientes</h2>
-    <pre id="log-content">Cargando...</pre>
-    <button id="download-logs-btn">Descargar logs</button>
+  <section id="logs-section" style="display:none;">
+    <h2>Logs</h2>
+    <pre id="logs-content">Cargando...</pre>
+    <button id="download-logs">Descargar logs</button>
   </section>
 
-  <section id="sendmsg" class="tool-section" style="display:none;">
+  <section id="sendmsg-section" style="display:none;">
     <h2>Enviar Mensaje Global</h2>
-    <textarea id="message-input" rows="4" style="width:100%; border-radius:6px; padding:8px;"></textarea>
-    <button id="send-message-btn" style="margin-top:10px;">Enviar</button>
-    <div id="sendmsg-result" style="margin-top:10px;"></div>
+    <textarea id="message-input" rows="4" placeholder="Escribe el mensaje aquí..."></textarea><br/>
+    <button id="send-message-btn">Enviar Mensaje</button>
+    <div id="sendmsg-result"></div>
   </section>
 
-  <section id="restart" class="tool-section" style="display:none;">
+  <section id="restart-section" style="display:none;">
     <h2>Reiniciar Servidor</h2>
-    <button id="restart-btn" style="background:#c0392b;">Reiniciar ahora</button>
-    <div id="restart-result" style="margin-top:10px;"></div>
+    <button id="restart-btn" style="background:#c0392b;">Reiniciar Ahora</button>
+    <div id="restart-result"></div>
   </section>
 </main>
 
 <script>
-  const ADMIN_ID = "1307562402958676048";
-  const BACKEND_URL = "https://josegwlol-backend.onrender.com";
+  const BACKEND_URL = "http://localhost:10000"; // Cambia aquí si tu backend está en otro dominio/puerto
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get("code");
-
-  const loginSection = document.getElementById("login-section");
-  const adminPanel = document.getElementById("admin-panel");
-  const logoutBtn = document.getElementById("logout-btn");
-  const menuToggle = document.getElementById("menu-toggle");
-  const menu = document.getElementById("menu");
-  const toolSections = document.querySelectorAll(".tool-section");
-
-  // Login code omitted here for brevity: as you already have login working, keep it.
-
-  // Simplify: Assume user is admin (already validated after login)
-
-  // Handle menu toggle (hamburger)
-  menuToggle.addEventListener("click", () => {
-    menu.classList.toggle("active");
-  });
-
-  // Show sections based on menu click
-  menu.querySelectorAll("button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const tool = btn.dataset.tool;
-      toolSections.forEach(s => s.style.display = "none");
-      document.getElementById(tool).style.display = "block";
-      menu.classList.remove("active");
-    });
-  });
-
-  logoutBtn.style.display = "inline-block";
-  logoutBtn.addEventListener("click", () => {
-    // Clear local storage or tokens and reload
+  // Manejo simple de logout (limpiar tokens y redirigir o recargar)
+  document.getElementById("logout-btn").addEventListener("click", () => {
     localStorage.clear();
-    window.location.href = "admin.html"; // vuelve a la pantalla login
+    alert("Sesión cerrada.");
+    // Recarga o redirige a login si tienes
+    location.reload();
   });
 
-  // Funciones para fetch a backend
+  // Mostrar sólo la sección indicada y ocultar las demás
+  function showSection(id) {
+    const sections = ["info-section","users-section","logs-section","sendmsg-section","restart-section"];
+    sections.forEach(sec => {
+      document.getElementById(sec).style.display = (sec === id) ? "block" : "none";
+    });
+  }
 
-  async function fetchServerInfo() {
+  // Fetch y mostrar info servidor
+  async function loadServerInfo() {
+    const div = document.getElementById("server-info");
+    div.textContent = "Cargando...";
     try {
       const res = await fetch(BACKEND_URL + "/api/admin-info");
+      if (!res.ok) throw new Error("Error al obtener info servidor");
       const data = await res.json();
-      const infoDiv = document.getElementById("server-info");
-      infoDiv.innerHTML = `
-        <b>Uptime:</b> ${data.uptimeSeconds} segundos<br />
-        <b>Memoria RSS:</b> ${data.memory.rssMB} MB<br />
-        <b>Heap Total:</b> ${data.memory.heapTotalMB} MB<br />
-        <b>Heap Usado:</b> ${data.memory.heapUsedMB} MB<br />
-        <b>CPUs:</b> ${data.cpuCount}<br />
-        <b>Hora Servidor:</b> ${new Date(data.serverTime).toLocaleString()}<br />
-        <b>Node.js Version:</b> ${data.nodeVersion}
+      div.innerHTML = `
+        <b>Uptime:</b> ${data.uptimeSeconds} segundos<br/>
+        <b>Memoria RSS:</b> ${data.memory.rssMB} MB<br/>
+        <b>Heap Usado:</b> ${data.memory.heapUsedMB} MB<br/>
+        <b>CPUs:</b> ${data.cpuCount}<br/>
+        <b>Hora Servidor:</b> ${new Date(data.serverTime).toLocaleString()}<br/>
+        <b>Versión Node.js:</b> ${data.nodeVersion}
       `;
     } catch (e) {
-      document.getElementById("server-info").innerText = "Error cargando información.";
+      div.textContent = "Error al cargar información del servidor.";
       console.error(e);
     }
   }
 
-  async function fetchUsers() {
+  // Fetch y mostrar usuarios conectados
+  async function loadUsers() {
+    const div = document.getElementById("user-list");
+    div.textContent = "Cargando...";
     try {
       const res = await fetch(BACKEND_URL + "/api/users");
+      if (!res.ok) throw new Error("Error al obtener usuarios");
       const data = await res.json();
-      const userListDiv = document.getElementById("user-list");
-      if (!data.users || data.users.length === 0) {
-        userListDiv.innerText = "No hay usuarios conectados.";
+      if (data.users.length === 0) {
+        div.textContent = "No hay usuarios conectados.";
         return;
       }
-      userListDiv.innerHTML = data.users.map(u => `
-        <div><b>${u.username}</b> (ID: ${u.id}) - Estado: ${u.status}</div>
-      `).join("");
+      div.innerHTML = data.users.map(u => `<div><b>${u.username}</b> (ID: ${u.id}) - Estado: ${u.status}</div>`).join("");
     } catch (e) {
-      document.getElementById("user-list").innerText = "Error cargando usuarios.";
+      div.textContent = "Error al cargar usuarios.";
       console.error(e);
     }
   }
 
-  async function fetchLogs() {
+  // Fetch y mostrar logs
+  async function loadLogs() {
+    const pre = document.getElementById("logs-content");
+    pre.textContent = "Cargando...";
     try {
       const res = await fetch(BACKEND_URL + "/api/logs");
+      if (!res.ok) throw new Error("Error al obtener logs");
       const data = await res.json();
-      const logsPre = document.getElementById("log-content");
-      logsPre.textContent = data.logs.join("\n");
+      pre.textContent = data.logs.join("\n");
     } catch (e) {
-      document.getElementById("log-content").textContent = "Error cargando logs.";
+      pre.textContent = "Error al cargar logs.";
       console.error(e);
     }
   }
 
-  document.getElementById("download-logs-btn").addEventListener("click", () => {
+  // Descargar logs
+  document.getElementById("download-logs").addEventListener("click", () => {
     fetch(BACKEND_URL + "/api/logs")
       .then(res => res.json())
       .then(data => {
@@ -208,9 +154,11 @@
       });
   });
 
+  // Enviar mensaje global
   document.getElementById("send-message-btn").addEventListener("click", async () => {
     const msg = document.getElementById("message-input").value.trim();
     const resDiv = document.getElementById("sendmsg-result");
+    resDiv.textContent = "";
     if (!msg) {
       resDiv.textContent = "El mensaje no puede estar vacío.";
       return;
@@ -234,6 +182,7 @@
     }
   });
 
+  // Reiniciar servidor
   document.getElementById("restart-btn").addEventListener("click", async () => {
     const resDiv = document.getElementById("restart-result");
     resDiv.textContent = "Reiniciando servidor...";
@@ -251,9 +200,30 @@
     }
   });
 
-  // Al cargar página, mostrar info por defecto
-  fetchServerInfo();
+  // Eventos botones menú
+  document.getElementById("btn-info").addEventListener("click", () => {
+    showSection("info-section");
+    loadServerInfo();
+  });
+  document.getElementById("btn-users").addEventListener("click", () => {
+    showSection("users-section");
+    loadUsers();
+  });
+  document.getElementById("btn-logs").addEventListener("click", () => {
+    showSection("logs-section");
+    loadLogs();
+  });
+  document.getElementById("btn-sendmsg").addEventListener("click", () => {
+    showSection("sendmsg-section");
+  });
+  document.getElementById("btn-restart").addEventListener("click", () => {
+    showSection("restart-section");
+  });
 
+  // Inicio: mostrar info servidor por defecto
+  showSection("info-section");
+  loadServerInfo();
 </script>
+
 </body>
 </html>
