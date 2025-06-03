@@ -31,22 +31,29 @@ body {
   align-items: center;
 }
 
-/* 4) Contenedor central (idéntico a original) */
+/* 4) Contenedor central */
 .container {
   width: 90%;
   max-width: 400px;
   text-align: center;
 }
 
-/* 5) Logo “josegw” con la misma tipografía de “hzm” */
+/* 5) Logo “josegw” */
 .logo {
   font-family: 'HZMLogo', sans-serif;
-  font-size: 42px;       /* Ajusta si el original usa otro tamaño exacto */
+  font-size: 42px;
   line-height: 1;
+  margin-bottom: 10px;
+}
+
+/* 6) Subtítulo debajo del logo */
+.subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: 30px;
 }
 
-/* 6) Formulario: inputs y textarea transparentes, borde blanco tenue */
+/* 7) Formulario: inputs y textarea transparentes, borde blanco tenue */
 form {
   display: flex;
   flex-direction: column;
@@ -74,7 +81,7 @@ textarea:focus {
   border-color: rgba(255, 255, 255, 0.9);
 }
 
-/* 7) Botón con degradado azul muy oscuro (mismo tamaño/forma que el “Redeem” original) */
+/* 8) Botón con degradado azul muy oscuro */
 button {
   background: linear-gradient(
     90deg,
@@ -94,10 +101,31 @@ button:hover {
   opacity: 0.85;
 }
 
-/* 8) Asegurar que todo sea responsive en móviles */
+/* 9) Enlace de correo electrónico */
+.email-link {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.email-link a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+.email-link a:hover {
+  color: #ffffff;
+}
+
+/* 10) Responsive en móviles */
 @media (max-width: 480px) {
   .logo {
     font-size: 36px;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 14px;
     margin-bottom: 24px;
   }
 
@@ -106,5 +134,9 @@ button:hover {
   button {
     font-size: 16px;
     padding: 12px 14px;
+  }
+
+  .email-link {
+    font-size: 13px;
   }
 }
