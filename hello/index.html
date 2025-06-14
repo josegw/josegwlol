@@ -2,113 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta 
-    name="viewport" 
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  />
-  <!-- Habilita modo standalone en iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>josegw</title>
 
-  <!-- Metadatos de redes, idénticos a los tuyos -->
+  <!-- PWA Config -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="josegw" />
+  <link rel="apple-touch-icon" href="icon.png" />
+
+  <!-- OG/Twitter preview -->
   <meta property="og:title" content="josegw" />
   <meta property="og:description" content="send a message." />
   <meta property="og:url" content="https://josegw.lol/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="josegw" />
-  <meta name="twitter:description" content="send a message." />
 
-  <!-- Tu CSS original -->
   <link rel="stylesheet" href="styles.css" />
-
-  <!-- Estilos extra para el prompt -->
-  <style>
-    /* Overlay full-screen, mismo fondo degradado */
-    #installPrompt {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #000010 0%, #001050 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      /* Oculto por defecto */
-      display: none;
-    }
-
-    /* Caja del mensaje, totalmente transparente por fuera */
-    #installPrompt .message-box {
-      text-align: center;
-      padding: 1.5rem;
-    }
-
-    /* Heading con tu fuente HZMLogo */
-    #installPrompt .message-box h2 {
-      font-family: 'HZMLogo', sans-serif;
-      /* Mismo tamaño que tu logo original */
-      font-size: 42px;
-      color: #ffffff;
-      margin-bottom: 1rem;
-    }
-
-    /* Texto explicativo con la tipografía secundaria */
-    #installPrompt .message-box p {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      color: rgba(255,255,255,0.8);
-      font-size: 16px;
-      margin: 0.5rem 0;
-      line-height: 1.4;
-    }
-  </style>
+  <script>
+    // Mostrar u ocultar contenido dependiendo del modo
+    window.onload = () => {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      document.getElementById("main-content").style.display = isStandalone ? "block" : "none";
+      document.getElementById("install-hint").style.display = isStandalone ? "none" : "flex";
+    };
+  </script>
 </head>
 <body>
-  <!-- PROMPT: sólo visible en Safari iPhone sin agregar -->
-  <div id="installPrompt">
-    <div class="message-box">
-      <h2>Add to Homescreen</h2>
-      <p>Tap the <strong>Share</strong> button</p>
-      <p>(<span style="font-size:1.2em;">⬇️</span>) and select</p>
-      <p><strong>“Add to Home Screen”</strong></p>
-      <p>Then open from your Home Screen icon.</p>
-    </div>
+  <!-- Si se abre desde navegador -->
+  <div id="install-hint" class="container">
+    <div class="logo">josegw</div>
+    <p class="subtitle">Add this page to your home screen to continue.</p>
+    <p style="font-size:14px;color:rgba(255,255,255,0.6);margin-top:20px;">Tap the share icon, then "Add to Home Screen"</p>
   </div>
 
-  <!-- TU CONTENIDO ORIGINAL -->
-  <div id="appContent">
-    <div class="container">
-      <div class="logo">josegw</div>
-      <p class="subtitle">send me a message through here</p>
-
-      <form action="https://formspree.io/f/your-form-id" method="POST">
-        <input type="email" name="email" placeholder="email" required />
-        <textarea name="message" placeholder="message" rows="4" required></textarea>
-        <button type="submit">send</button>
-      </form>
-
-      <p class="email-link">
-        <a href="mailto:hola@josegw.lol?subject=hola%20%F0%9F%91%8B">
-          or send me a email @ hola@josegw.lol
-        </a>
-      </p>
-    </div>
+  <!-- Si se abre desde pantalla de inicio -->
+  <div id="main-content" class="container" style="display: none;">
+    <div class="logo">josegw</div>
+    <p class="subtitle">send me a message through here</p>
+    <form action="https://formspree.io/f/your-form-id" method="POST">
+      <input type="email" name="email" placeholder="email" required />
+      <textarea name="message" placeholder="message" rows="4" required></textarea>
+      <button type="submit">send</button>
+    </form>
+    <p class="email-link">
+      <a href="mailto:hola@josegw.lol?subject=hola%20%F0%9F%91%8B">or send me an email @ hola@josegw.lol</a>
+    </p>
   </div>
-
-  <script>
-    const isIphone = /iphone/i.test(navigator.userAgent);
-    const inStandalone = window.navigator.standalone === true;
-
-    if (isIphone && !inStandalone) {
-      // Mostrar prompt, ocultar contenido
-      document.getElementById('installPrompt').style.display = 'flex';
-      document.getElementById('appContent').style.display = 'none';
-    } else {
-      // Mostrar contenido, asegurar que el prompt esté oculto
-      document.getElementById('installPrompt').style.display = 'none';
-      document.getElementById('appContent').style.display = 'block';
-    }
-  </script>
 </body>
 </html>
