@@ -2,82 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta 
+    name="viewport" 
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+  <!-- Habilita modo standalone en iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
   <title>josegw</title>
 
+  <!-- Metadatos de redes, idénticos a los tuyos -->
   <meta property="og:title" content="josegw" />
   <meta property="og:description" content="send a message." />
   <meta property="og:url" content="https://josegw.lol/" />
   <meta property="og:type" content="website" />
-
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="josegw" />
   <meta name="twitter:description" content="send a message." />
 
+  <!-- Tu CSS original -->
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Estilos adicionales -->
+  <!-- Estilos extra para el prompt -->
   <style>
-    @font-face {
-      font-family: 'HZMLogo';
-      src: url('fonts/HZMLogo.woff2') format('woff2'),
-           url('fonts/HZMLogo.woff') format('woff');
-      font-weight: normal;
-      font-style: normal;
-    }
-
+    /* Overlay full-screen, mismo fondo degradado */
     #installPrompt {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       background: linear-gradient(135deg, #000010 0%, #001050 100%);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 9999;
+      /* Oculto por defecto */
+      display: none;
     }
 
+    /* Caja del mensaje, totalmente transparente por fuera */
     #installPrompt .message-box {
       text-align: center;
-      padding: 2rem;
-      max-width: 90%;
+      padding: 1.5rem;
     }
 
+    /* Heading con tu fuente HZMLogo */
     #installPrompt .message-box h2 {
       font-family: 'HZMLogo', sans-serif;
+      /* Mismo tamaño que tu logo original */
       font-size: 42px;
       color: #ffffff;
       margin-bottom: 1rem;
     }
 
+    /* Texto explicativo con la tipografía secundaria */
     #installPrompt .message-box p {
       font-family: 'Helvetica Neue', Arial, sans-serif;
       color: rgba(255,255,255,0.8);
       font-size: 16px;
-      margin-bottom: 0.5rem;
-    }
-
-    .hidden {
-      display: none !important;
+      margin: 0.5rem 0;
+      line-height: 1.4;
     }
   </style>
 </head>
 <body>
-  <!-- Pantalla de advertencia -->
-  <div id="installPrompt" class="hidden">
+  <!-- PROMPT: sólo visible en Safari iPhone sin agregar -->
+  <div id="installPrompt">
     <div class="message-box">
-      <h2>josegw</h2>
-      <p>To use this app, tap the <strong>Share</strong> button (<span style="font-size:1.2em;">⬇️</span>)</p>
-      <p>and choose <strong>“Add to Home Screen”</strong>.</p>
-      <p>Then open it from your home screen icon.</p>
+      <h2>Add to Homescreen</h2>
+      <p>Tap the <strong>Share</strong> button</p>
+      <p>(<span style="font-size:1.2em;">⬇️</span>) and select</p>
+      <p><strong>“Add to Home Screen”</strong></p>
+      <p>Then open from your Home Screen icon.</p>
     </div>
   </div>
 
-  <!-- Contenido del sitio -->
-  <div id="appContent" class="hidden">
+  <!-- TU CONTENIDO ORIGINAL -->
+  <div id="appContent">
     <div class="container">
       <div class="logo">josegw</div>
       <p class="subtitle">send me a message through here</p>
@@ -98,12 +98,16 @@
 
   <script>
     const isIphone = /iphone/i.test(navigator.userAgent);
-    const isStandalone = window.navigator.standalone === true;
+    const inStandalone = window.navigator.standalone === true;
 
-    if (isIphone && !isStandalone) {
-      document.getElementById('installPrompt').classList.remove('hidden');
+    if (isIphone && !inStandalone) {
+      // Mostrar prompt, ocultar contenido
+      document.getElementById('installPrompt').style.display = 'flex';
+      document.getElementById('appContent').style.display = 'none';
     } else {
-      document.getElementById('appContent').classList.remove('hidden');
+      // Mostrar contenido, asegurar que el prompt esté oculto
+      document.getElementById('installPrompt').style.display = 'none';
+      document.getElementById('appContent').style.display = 'block';
     }
   </script>
 </body>
