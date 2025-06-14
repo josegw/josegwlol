@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Mi App Web</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+      text-align: center;
+      padding: 2rem;
+    }
+    .hidden { display: none; }
+    .message {
+      max-width: 300px;
+      margin: auto;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="installPrompt" class="message">
+    <h2>Agregar a pantalla de inicio</h2>
+    <p>Para usar esta app, presiona el botón <strong>Compartir</strong> (<span style="font-size: 1.2em;">⬇️</span>) y luego selecciona <strong>“Agregar a inicio”</strong>.</p>
+    <p>Abre la app desde la pantalla de inicio después de eso.</p>
+  </div>
+
+  <div id="appContent" class="hidden">
+    <h1>¡Bienvenido!</h1>
+    <p>Estás usando la app correctamente desde la pantalla de inicio.</p>
+    <!-- Aquí va tu contenido real -->
+  </div>
+
+  <script>
+    // Detectar si es iPhone
+    const isIphone = /iphone/i.test(navigator.userAgent);
+
+    // Detectar si está en modo standalone (pantalla de inicio)
+    const isInStandaloneMode = window.navigator.standalone === true;
+
+    if (isIphone && !isInStandaloneMode) {
+      // Mostrar mensaje para instalar como app
+      document.getElementById("installPrompt").classList.remove("hidden");
+    } else {
+      // Mostrar contenido de la app
+      document.getElementById("appContent").classList.remove("hidden");
+      document.getElementById("installPrompt").classList.add("hidden");
+    }
+  </script>
+</body>
+</html>
