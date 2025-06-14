@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <!-- Habilita web app en iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
   <title>josegw</title>
 
-  <!-- Metadatos para previews en redes (idénticos a los tuyos) -->
   <meta property="og:title" content="josegw" />
   <meta property="og:description" content="send a message." />
   <meta property="og:url" content="https://josegw.lol/" />
@@ -19,59 +17,66 @@
   <meta name="twitter:title" content="josegw" />
   <meta name="twitter:description" content="send a message." />
 
-  <!-- Tu CSS original -->
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Estilos para el prompt de instalación -->
+  <!-- Estilos adicionales -->
   <style>
-    /* Cubierta completa con tu mismo fondo */
+    @font-face {
+      font-family: 'HZMLogo';
+      src: url('fonts/HZMLogo.woff2') format('woff2'),
+           url('fonts/HZMLogo.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     #installPrompt {
-      position: absolute;
+      position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
+      background: linear-gradient(135deg, #000010 0%, #001050 100%);
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #000010 0%, #001050 100%);
       z-index: 9999;
     }
-    /* Cajas del mensaje con tipografía y look coherente */
+
     #installPrompt .message-box {
-      background: rgba(0,0,0,0.85);
-      padding: 2rem;
-      border-radius: 10px;
-      max-width: 320px;
       text-align: center;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      color: #fff;
+      padding: 2rem;
+      max-width: 90%;
     }
+
     #installPrompt .message-box h2 {
+      font-family: 'HZMLogo', sans-serif;
+      font-size: 42px;
+      color: #ffffff;
       margin-bottom: 1rem;
-      font-size: 1.4rem;
     }
+
     #installPrompt .message-box p {
-      font-size: 1rem;
-      line-height: 1.4;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
       color: rgba(255,255,255,0.8);
+      font-size: 16px;
       margin-bottom: 0.5rem;
     }
+
     .hidden {
       display: none !important;
     }
   </style>
 </head>
 <body>
-  <!-- Mensaje “Agrega a inicio” -->
+  <!-- Pantalla de advertencia -->
   <div id="installPrompt" class="hidden">
     <div class="message-box">
-      <h2>Agregar a pantalla de inicio</h2>
-      <p>Para usar esta app, presiona el botón <strong>Compartir</strong> (<span style="font-size:1.2em;">⬇️</span>)</p>
-      <p>y luego selecciona <strong>“Agregar a inicio”</strong>.</p>
-      <p>Abre la app desde el ícono de tu pantalla de inicio.</p>
+      <h2>josegw</h2>
+      <p>To use this app, tap the <strong>Share</strong> button (<span style="font-size:1.2em;">⬇️</span>)</p>
+      <p>and choose <strong>“Add to Home Screen”</strong>.</p>
+      <p>Then open it from your home screen icon.</p>
     </div>
   </div>
 
-  <!-- Tu contenido original, intacto -->
+  <!-- Contenido del sitio -->
   <div id="appContent" class="hidden">
     <div class="container">
       <div class="logo">josegw</div>
@@ -92,7 +97,6 @@
   </div>
 
   <script>
-    // Detectar iPhone y modo standalone
     const isIphone = /iphone/i.test(navigator.userAgent);
     const isStandalone = window.navigator.standalone === true;
 
