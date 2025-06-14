@@ -5,23 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>josegw</title>
 
-  <!-- PWA Config -->
+  <!-- Web App config -->
   <link rel="manifest" href="manifest.json" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="josegw" />
-  <link rel="apple-touch-icon" href="icon.png" />
-
-  <!-- OG/Twitter preview -->
-  <meta property="og:title" content="josegw" />
-  <meta property="og:description" content="send a message." />
-  <meta property="og:url" content="https://josegw.lol/" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="stylesheet" href="styles.css" />
   <script>
-    // Mostrar u ocultar contenido dependiendo del modo
     window.onload = () => {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
       document.getElementById("main-content").style.display = isStandalone ? "block" : "none";
@@ -30,14 +21,14 @@
   </script>
 </head>
 <body>
-  <!-- Si se abre desde navegador -->
-  <div id="install-hint" class="container">
+  <!-- Vista para navegador -->
+  <div id="install-hint" class="container vertical-hint">
     <div class="logo">josegw</div>
     <p class="subtitle">Add this page to your home screen to continue.</p>
-    <p style="font-size:14px;color:rgba(255,255,255,0.6);margin-top:20px;">Tap the share icon, then "Add to Home Screen"</p>
+    <p class="hint-detail">Tap the share icon, then "Add to Home Screen"</p>
   </div>
 
-  <!-- Si se abre desde pantalla de inicio -->
+  <!-- Vista para app desde la pantalla de inicio -->
   <div id="main-content" class="container" style="display: none;">
     <div class="logo">josegw</div>
     <p class="subtitle">send me a message through here</p>
