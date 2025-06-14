@@ -2,57 +2,75 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <title>Mi App Web</title>
+  
+  <title>josegw</title>
+
+  <!-- Metadatos para previews en redes -->
+  <meta property="og:title" content="josegw" />
+  <meta property="og:description" content="send a message." />
+  <meta property="og:url" content="https://josegw.lol/" />
+  <meta property="og:type" content="website" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="josegw" />
+  <meta name="twitter:description" content="send a message." />
+
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #f8f8f8;
-      color: #333;
-      text-align: center;
+    #installPrompt {
+      background: #000010;
+      color: white;
       padding: 2rem;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      text-align: center;
     }
-    .hidden { display: none; }
-    .message {
-      max-width: 300px;
-      margin: auto;
-      padding: 1.5rem;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+    #installPrompt p {
+      margin-top: 1rem;
+      font-size: 16px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div id="installPrompt" class="message">
+  <div id="installPrompt" class="hidden">
     <h2>Agregar a pantalla de inicio</h2>
     <p>Para usar esta app, presiona el botón <strong>Compartir</strong> (<span style="font-size: 1.2em;">⬇️</span>) y luego selecciona <strong>“Agregar a inicio”</strong>.</p>
-    <p>Abre la app desde la pantalla de inicio después de eso.</p>
+    <p>Abre la app desde el ícono en tu pantalla de inicio.</p>
   </div>
 
   <div id="appContent" class="hidden">
-    <h1>¡Bienvenido!</h1>
-    <p>Estás usando la app correctamente desde la pantalla de inicio.</p>
-    <!-- Aquí va tu contenido real -->
+    <div class="container">
+      <div class="logo">josegw</div>
+      <p class="subtitle">send me a message through here</p>
+
+      <form action="https://formspree.io/f/your-form-id" method="POST">
+        <input type="email" name="email" placeholder="email" required />
+        <textarea name="message" placeholder="message" rows="4" required></textarea>
+        <button type="submit">send</button>
+      </form>
+
+      <p class="email-link">
+        <a href="mailto:hola@josegw.lol?subject=hola%20%F0%9F%91%8B">or send me a email @ hola@josegw.lol</a>
+      </p>
+    </div>
   </div>
 
   <script>
-    // Detectar si es iPhone
     const isIphone = /iphone/i.test(navigator.userAgent);
+    const isStandalone = window.navigator.standalone === true;
 
-    // Detectar si está en modo standalone (pantalla de inicio)
-    const isInStandaloneMode = window.navigator.standalone === true;
-
-    if (isIphone && !isInStandaloneMode) {
-      // Mostrar mensaje para instalar como app
-      document.getElementById("installPrompt").classList.remove("hidden");
+    if (isIphone && !isStandalone) {
+      document.getElementById('installPrompt').classList.remove('hidden');
     } else {
-      // Mostrar contenido de la app
-      document.getElementById("appContent").classList.remove("hidden");
-      document.getElementById("installPrompt").classList.add("hidden");
+      document.getElementById('appContent').classList.remove('hidden');
     }
   </script>
 </body>
