@@ -1,13 +1,11 @@
-/* styles.css */
-
-/* 1) Reset / Box sizing */
+/* Reset */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* 2) Importar la fuente personalizada del logo (HZMLogo) */
+/* Fuente personalizada */
 @font-face {
   font-family: 'HZMLogo';
   src: url('fonts/HZMLogo.woff2') format('woff2');
@@ -15,14 +13,9 @@
   font-style: normal;
 }
 
-/* 3) Estilos generales del body */
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  background: linear-gradient(
-    135deg,
-    #000010 0%,
-    #001050 100%
-  );
+  background: linear-gradient(135deg, #000010 0%, #001050 100%);
   color: #ffffff;
   height: 100vh;
   display: flex;
@@ -30,17 +23,14 @@ body {
   align-items: center;
 }
 
-/* 4) Contenedor central */
+/* Contenedor */
 .container {
   width: 90%;
   max-width: 400px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-/* 5) Logo “josegw” */
+/* Logo */
 .logo {
   font-family: 'HZMLogo', sans-serif;
   font-size: 42px;
@@ -48,79 +38,42 @@ body {
   margin-bottom: 10px;
 }
 
-/* 6) Subtítulo debajo del logo */
+/* Subtítulo */
 .subtitle {
   font-size: 16px;
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-/* 7) Formulario: inputs y textarea transparentes, borde blanco tenue */
-form {
+/* Interactivo (modo app) */
+.interactive {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  gap: 20px;
+}
+
+.door {
   width: 100%;
-}
-
-input,
-textarea {
-  background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-radius: 6px;
-  padding: 14px 16px;
-  font-size: 16px;
-  color: #ffffff;
-  outline: none;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-input:focus,
-textarea:focus {
-  border-color: rgba(255, 255, 255, 0.9);
-}
-
-/* 8) Botón con degradado azul muy oscuro */
-button {
-  background: linear-gradient(
-    90deg,
-    #0b1a3a 0%,
-    #112454 100%
-  );
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  padding: 14px 16px;
-  font-size: 18px;
+  max-width: 300px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: opacity 0.3s ease-in-out;
+  box-shadow: 0 0 16px rgba(0,0,0,0.6);
+  transition: transform 0.2s ease;
 }
 
-button:hover {
-  opacity: 0.85;
+.door:hover {
+  transform: scale(1.05);
 }
 
-/* 9) Enlace de correo electrónico */
-.email-link {
+.secret-text {
+  font-size: 20px;
+  text-align: center;
   margin-top: 20px;
-  font-size: 14px;
-}
-
-.email-link a {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  transition: color 0.3s ease-in-out;
-}
-
-.email-link a:hover {
   color: #ffffff;
 }
 
-/* 10) Responsive en móviles */
+/* Responsive */
 @media (max-width: 480px) {
   .logo {
     font-size: 36px;
@@ -129,31 +82,10 @@ button:hover {
 
   .subtitle {
     font-size: 14px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
-  input,
-  textarea,
-  button {
-    font-size: 16px;
-    padding: 12px 14px;
+  .secret-text {
+    font-size: 18px;
   }
-
-  .email-link {
-    font-size: 13px;
-  }
-}
-
-/* 11) Vistas para modo navegador (no PWA) */
-.vertical-hint {
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  text-align: center;
-}
-
-.hint-detail {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
 }
