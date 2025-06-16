@@ -1,91 +1,101 @@
-/* Reset */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* 1) Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-/* Fuente personalizada */
+/* 2) Fuente personalizada */
 @font-face {
   font-family: 'HZMLogo';
   src: url('fonts/HZMLogo.woff2') format('woff2');
 }
 
-/* Estilos base */
+/* 3) Body y fondo */
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background: linear-gradient(135deg, #000010 0%, #001050 100%);
   color: #fff;
   height: 100vh;
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: center;
 }
 
+/* 4) Contenedor central */
 .container {
-  width: 90%; max-width: 400px;
+  width: 90%;
+  max-width: 400px;
   text-align: center;
-  display: flex; flex-direction: column;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
-/* Logo */
+/* 5) Logo */
 .logo {
   font-family: 'HZMLogo', sans-serif;
   font-size: 42px;
   margin-bottom: 20px;
 }
 
-/* Animación y bulldozer */
-.subtitle-wrapper {
+/* 6) Zona de animación */
+.track-wrapper {
   position: relative;
   width: 100%;
   height: 100px;
-  overflow: visible;
-  margin-bottom: 30px;
+  overflow: hidden;
+  margin-bottom: 20px;
 }
 
-/* Texto blanco desplazándose */
-.subtitle {
-  font-size: 16px;
-  color: rgba(255,255,255,0.9);
+/* 7) Texto que se moverá */
+.message {
   position: absolute;
-  top: 30px; left: 0;
+  top: 40px;
+  left: 0;
+  font-size: 15px;
+  color: rgba(255,255,255,0.8);
   white-space: nowrap;
+  animation: pushText 6s infinite ease-in-out;
 }
 
-.animate-text {
-  animation: textShift 4s infinite ease-in-out;
-}
-
-/* SVG bulldozer animado desplazándose */
+/* 8) Bulldozer animado */
 .bulldozer {
   position: absolute;
   bottom: 0;
-  left: -200px;
-  width: 200px;
-  height: 100px;
-  animation: drive 4s infinite ease-in-out;
+  left: -220px;
+  width: 220px;
+  height: auto;
+  animation: drive 6s infinite ease-in-out;
 }
 
-/* Animaciones */
+/* 9) Subtítulo fijo */
+.subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.9);
+}
+
+/* 10) Animaciones CSS */
 @keyframes drive {
-  0%   { left: -200px; }
-  50%  { left:  calc(100% - 100px); }
-  100% { left: -200px; }
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(0); }
+  50%  { transform: translateX(calc(100% + 220px)); }
+  80%  { transform: translateX(calc(100% + 220px)); }
+  100% { transform: translateX(0); }
 }
-@keyframes textShift {
-  0%,100% { transform: translateX(0); }
-  50%     { transform: translateX(80px); }
+@keyframes pushText {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(0); }
+  50%  { transform: translateX(80px); }
+  80%  { transform: translateX(80px); }
+  100% { transform: translateX(0); }
 }
 
-/* Mensaje suavemente empujado por la pala */
-.message {
-  font-size: 15px;
-  color: rgba(255,255,255,0.6);
-}
-
-/* Responsive */
+/* 11) Responsive para iPhone */
 @media (max-width: 480px) {
   .logo { font-size: 36px; margin-bottom: 16px; }
-  .subtitle { font-size: 14px; top: 25px; }
-  .message { font-size: 13px; }
-  .subtitle-wrapper { height: 80px; margin-bottom: 24px; }
-  .bulldozer { width: 150px; height: 75px; }
+  .message { font-size: 13px; top: 35px; }
+  .subtitle { font-size: 14px; }
+  .track-wrapper { height: 80px; margin-bottom: 16px; }
+  .bulldozer { width: 180px; }
 }
