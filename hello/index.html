@@ -3,43 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>josegw</title>
 
-  <!-- Web App config -->
-  <link rel="manifest" href="manifest.json" />
+  <title>secret site</title>
+
+  <!-- Apple PWA support -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="apple-mobile-web-app-title" content="josegw" />
 
+  <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="styles.css" />
+
+  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AA..."> <!-- invisible fallback -->
+</head>
+<body>
+  <!-- Vista para app instalada -->
+  <div id="main-content" class="container" style="display: none;">
+    <div id="interactive" class="interactive">
+      <img src="img/door.png" alt="door" class="door" />
+    </div>
+  </div>
+
+  <!-- Vista para navegador Safari -->
+  <div id="install-hint" class="container" style="display: none;">
+    <div class="logo">josegw</div>
+    <p class="subtitle">send me a message through here</p>
+    <p class="subtitle">tap the share icon and “Add to Home Screen”</p>
+  </div>
+
   <script>
     window.onload = () => {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
       document.getElementById("main-content").style.display = isStandalone ? "block" : "none";
       document.getElementById("install-hint").style.display = isStandalone ? "none" : "flex";
+
+      if (isStandalone) {
+        const door = document.querySelector('.door');
+        if (door) {
+          door.addEventListener('click', () => {
+            document.getElementById('interactive').innerHTML = `
+              <div class="secret-text">Welcome to the secret space.</div>
+            `;
+          });
+        }
+      }
     };
   </script>
-</head>
-<body>
-  <!-- Vista para navegador -->
-  <div id="install-hint" class="container vertical-hint">
-    <div class="logo">josegw</div>
-    <p class="subtitle">Add this page to your home screen to continue.</p>
-    <p class="hint-detail">Tap the share icon, then "Add to Home Screen"</p>
-  </div>
-
-  <!-- Vista para app desde la pantalla de inicio -->
-  <div id="main-content" class="container" style="display: none;">
-    <div class="logo">josegw</div>
-    <p class="subtitle">send me a message through here</p>
-    <form action="https://formspree.io/f/your-form-id" method="POST">
-      <input type="email" name="email" placeholder="email" required />
-      <textarea name="message" placeholder="message" rows="4" required></textarea>
-      <button type="submit">send</button>
-    </form>
-    <p class="email-link">
-      <a href="mailto:hola@josegw.lol?subject=hola%20%F0%9F%91%8B">or send me an email @ hola@josegw.lol</a>
-    </p>
-  </div>
 </body>
 </html>
