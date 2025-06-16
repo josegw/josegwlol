@@ -13,7 +13,7 @@
   font-style: normal;
 }
 
-/* Fondo degradado oscuro */
+/* Fondo */
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background: linear-gradient(135deg, #000010 0%, #001050 100%);
@@ -40,17 +40,57 @@ body {
   font-family: 'HZMLogo', sans-serif;
   font-size: 42px;
   line-height: 1;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-/* Subtítulo */
+/* Subtítulo animado */
+.subtitle-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
 .subtitle {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  display: inline-block;
 }
 
-/* Mensaje adicional */
+.animate-text {
+  animation: moveText 4s ease-in-out infinite alternate;
+}
+
+.bulldozer {
+  font-size: 24px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  animation: moveBulldozer 4s ease-in-out infinite alternate;
+}
+
+/* Animaciones */
+@keyframes moveText {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(30px);
+  }
+}
+
+@keyframes moveBulldozer {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(30px);
+  }
+}
+
+/* Mensaje */
 .message {
   font-size: 15px;
   color: rgba(255, 255, 255, 0.6);
@@ -68,5 +108,9 @@ body {
 
   .message {
     font-size: 13px;
+  }
+
+  .bulldozer {
+    font-size: 20px;
   }
 }
