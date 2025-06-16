@@ -1,8 +1,8 @@
 {
   "name": "josegw",
   "short_name": "josegw",
-  "start_url": ".",
+  "start_url": "/hello/index.html",
   "display": "standalone",
   "background_color": "#000010",
-  "theme_color": "#112454"
+  "theme_color": "#000010"
 }
