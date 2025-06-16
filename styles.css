@@ -7,7 +7,7 @@
   src: url('fonts/HZMLogo.woff2') format('woff2');
 }
 
-/* Fondo y base */
+/* Estilos base */
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background: linear-gradient(135deg, #000010 0%, #001050 100%);
@@ -21,8 +21,7 @@ body {
 .container {
   width: 90%; max-width: 400px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column;
   align-items: center;
 }
 
@@ -37,57 +36,56 @@ body {
 .subtitle-wrapper {
   position: relative;
   width: 100%;
-  height: 60px;
-  overflow: hidden;
-  margin-bottom: 20px;
+  height: 100px;
+  overflow: visible;
+  margin-bottom: 30px;
 }
 
+/* Texto blanco desplazándose */
 .subtitle {
   font-size: 16px;
   color: rgba(255,255,255,0.9);
   position: absolute;
-  top: 22px;
-  left: 0;
+  top: 30px; left: 0;
+  white-space: nowrap;
 }
 
 .animate-text {
-  animation: textMove 4s infinite ease-in-out;
+  animation: textShift 4s infinite ease-in-out;
 }
 
-.bulldozer-wrapper {
+/* SVG bulldozer animado desplazándose */
+.bulldozer {
   position: absolute;
   bottom: 0;
-  left: -100px;
-  width: 100px;
+  left: -200px;
+  width: 200px;
+  height: 100px;
   animation: drive 4s infinite ease-in-out;
-}
-
-.bulldozer {
-  width: 100%;
-  height: auto;
 }
 
 /* Animaciones */
 @keyframes drive {
-  0%   { left: -100px; }
-  50%  { left: calc(100% - 20px); }
-  100% { left: -100px; }
+  0%   { left: -200px; }
+  50%  { left:  calc(100% - 100px); }
+  100% { left: -200px; }
 }
-@keyframes textMove {
+@keyframes textShift {
   0%,100% { transform: translateX(0); }
-  50%     { transform: translateX(40px); }
+  50%     { transform: translateX(80px); }
 }
 
-/* Mensaje */
+/* Mensaje suavemente empujado por la pala */
 .message {
   font-size: 15px;
   color: rgba(255,255,255,0.6);
 }
 
 /* Responsive */
-@media (max-width:480px) {
-  .logo { font-size: 36px; }
-  .subtitle { font-size: 14px; top: 20px; }
+@media (max-width: 480px) {
+  .logo { font-size: 36px; margin-bottom: 16px; }
+  .subtitle { font-size: 14px; top: 25px; }
   .message { font-size: 13px; }
-  .subtitle-wrapper { height: 50px; }
+  .subtitle-wrapper { height: 80px; margin-bottom: 24px; }
+  .bulldozer { width: 150px; height: 75px; }
 }
