@@ -1,76 +1,42 @@
 import express from "express";
-import os from "os";
-import process from "process";
+import cors from "cors";
 
 const app = express();
-const PORT = 10000;
+const PORT = process.env.PORT || 10000;
 
+app.use(cors());
 app.use(express.json());
 
-let logs = [];
+const clavesValidas = new Map(); // clave => userId
 
-function addLog(msg) {
-  const now = new Date().toISOString();
-  logs.push(`[${now}] ${msg}`);
-  if (logs.length > 100) logs.shift();
-  console.log(msg);
-}
+// 📥 Roblox manda la clave generada
+app.post("/api/registrar-clave", (req, res) => {
+  const { clave, userId } = req.body;
 
-// Endpoint para obtener info del servidor
-app.get("/api/admin-info", (req, res) => {
-  try {
-    addLog("Petición de info servidor");
-    const uptime = process.uptime();
-    const mem = process.memoryUsage();
-    res.json({
-      uptimeSeconds: Math.floor(uptime),
-      memory: {
-        rssMB: (mem.rss / 1024 / 1024).toFixed(2),
-        heapUsedMB: (mem.heapUsed / 1024 / 1024).toFixed(2),
-      },
-      cpuCount: os.cpus().length,
-      serverTime: new Date().toISOString(),
-      nodeVersion: process.version,
-    });
-  } catch (e) {
-    res.status(500).json({ error: "Error al obtener info" });
+  if (!clave || !userId) {
+    return res.status(400).json({ error: "Faltan datos clave o userId" });
   }
+
+  clavesValidas.set(clave, userId);
+  console.log(`[+] Clave registrada para ${userId}: ${clave}`);
+  res.json({ ok: true });
 });
 
-// Endpoint para obtener logs
-app.get("/api/logs", (req, res) => {
-  addLog("Petición de logs");
-  res.json({ logs });
-});
+// 🔍 Web consulta si la clave es válida
+app.post("/api/verificar-clave", (req, res) => {
+  const { clave } = req.body;
 
-// Endpoint para enviar mensaje (simulado)
-app.post("/api/send-message", (req, res) => {
-  const { message } = req.body;
-  if (!message || message.trim() === "") {
-    return res.status(400).json({ error: "Mensaje vacío" });
+  if (!clave || !clavesValidas.has(clave)) {
+    return res.status(400).json({ valido: false, mensaje: "Clave inválida o expirada" });
   }
-  addLog(`Mensaje global: ${message}`);
-  res.json({ message: "Mensaje recibido (simulado)." });
-});
 
-// Endpoint para obtener lista de usuarios (simulado)
-app.get("/api/users", (req, res) => {
-  addLog("Petición lista usuarios");
-  res.json({
-    users: [
-      { id: "1307562402958676048", username: "TuUsuario#1234", status: "online" },
-      { id: "987654321098765432", username: "Amigo#4321", status: "offline" },
-    ],
-  });
-});
+  const userId = clavesValidas.get(clave);
+  clavesValidas.delete(clave); // 🔐 Borra la clave para que no se reutilice
 
-// Endpoint para reiniciar servidor (simulado)
-app.post("/api/restart", (req, res) => {
-  addLog("Petición reinicio servidor");
-  res.json({ message: "Reinicio simulado ejecutado." });
-  // Aquí podrías agregar lógica real para reiniciar si quieres
+  console.log(`[✓] Clave válida para ${userId}: ${clave}`);
+  res.json({ valido: true, userId });
 });
 
 app.listen(PORT, () => {
-  console.log(`Servidor backend corriendo en puerto ${PORT}`);
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });
