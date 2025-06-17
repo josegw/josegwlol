@@ -1,102 +1,113 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>secret site</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../fonts/fonts.css">
+  <meta charset="UTF-8" />
+  <title>Private Access</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#000010" />
+  <link rel="stylesheet" href="../fonts/HZMLogo.css" />
   <style>
+    @font-face {
+      font-family: 'HZMLogo';
+      src: url('../fonts/HZMLogo.woff2') format('woff2');
+    }
+
     body {
+      background-color: #0a0f1c;
+      color: white;
       font-family: 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(135deg, #000010 0%, #001050 100%);
-      color: #ffffff;
-      height: 100vh;
+      margin: 0;
+      padding: 0;
+      text-align: center;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      text-align: center;
-      padding: 20px;
+      height: 100vh;
     }
 
-    .container {
-      width: 90%;
-      max-width: 400px;
-    }
-
-    .logo {
+    h1 {
       font-family: 'HZMLogo', sans-serif;
       font-size: 42px;
+      color: #00bfff;
       margin-bottom: 10px;
     }
 
     .subtitle {
-      font-size: 16px;
-      color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 24px;
+      font-size: 14px;
+      color: #ccc;
+      max-width: 90%;
+      margin-bottom: 30px;
     }
 
     input {
-      background-color: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
       border-radius: 6px;
-      padding: 14px 16px;
+      border: none;
       font-size: 16px;
-      color: #ffffff;
-      outline: none;
-      width: 100%;
-    }
-
-    input::placeholder {
-      color: rgba(255, 255, 255, 0.6);
+      margin-top: 20px;
     }
 
     button {
       margin-top: 20px;
-      padding: 14px 16px;
-      font-size: 18px;
+      padding: 10px 25px;
+      font-size: 16px;
       border: none;
       border-radius: 6px;
-      background: linear-gradient(90deg, #0b1a3a 0%, #112454 100%);
+      background-color: #00bfff;
       color: white;
       cursor: pointer;
-      transition: opacity 0.3s ease-in-out;
-      width: 100%;
     }
 
     button:hover {
-      opacity: 0.85;
+      background-color: #009ac1;
     }
 
     #resultado {
       margin-top: 30px;
-      font-size: 16px;
+      font-size: 18px;
     }
 
-    .info {
-      margin-top: 20px;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.7);
+    a {
+      color: #00bfff;
     }
 
-    .info a {
-      color: #7dafff;
-      text-decoration: underline;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">Private</div>
-    <p class="subtitle">Acceso privado. Para obtener una clave, únete al juego de Roblox y sigue las instrucciones:</p>
-    <p class="info"><a href="https://www.roblox.com/es/games/98262951659977/Experiment" target="_blank">https://www.roblox.com/es/games/98262951659977/Experiment</a></p>
+  <div id="app">
+    <h1>Private</h1>
+    <div class="subtitle">
+      Acceso privado. Puedes obtener una clave única al unirte a nuestro juego en Roblox:<br>
+      <a href="https://www.roblox.com/es/games/98262951659977/Experiment" target="_blank">Unirse al juego</a>
+    </div>
+  </div>
 
+  <div id="claveApp" class="hidden">
+    <h1>Private</h1>
     <input type="text" id="claveInput" placeholder="Introduce tu clave única" />
+    <br>
     <button onclick="verificarClave()">Validar Clave</button>
-
     <div id="resultado"></div>
   </div>
 
   <script>
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    const app = document.getElementById('app');
+    const claveApp = document.getElementById('claveApp');
+
+    if (isStandalone) {
+      app.classList.add('hidden');
+      claveApp.classList.remove('hidden');
+    }
+
     async function verificarClave() {
       const clave = document.getElementById('claveInput').value.trim();
       const resultado = document.getElementById('resultado');
@@ -119,10 +130,10 @@
         const data = await res.json();
 
         if (res.ok && data.valida) {
-          resultado.innerText = "✅ Clave válida. Redirigiendo...";
+          resultado.innerText = "✅ Clave válida. Acceso autorizado.";
           resultado.style.color = "lightgreen";
           setTimeout(() => {
-            window.location.href = "extra.html"; // esta página también debe estar en el mismo estilo
+            window.location.href = "extra.html";
           }, 1500);
         } else {
           resultado.innerText = "❌ Clave inválida o ya utilizada.";
