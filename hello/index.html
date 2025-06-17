@@ -2,110 +2,36 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Private Access</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="theme-color" content="#000010" />
-  <link rel="stylesheet" href="../fonts/HZMLogo.css" />
-  <style>
-    @font-face {
-      font-family: 'HZMLogo';
-      src: url('../fonts/HZMLogo.woff2') format('woff2');
-    }
-
-    body {
-      background-color: #0a0f1c;
-      color: white;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    h1 {
-      font-family: 'HZMLogo', sans-serif;
-      font-size: 42px;
-      color: #00bfff;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: #ccc;
-      max-width: 90%;
-      margin-bottom: 30px;
-    }
-
-    input {
-      padding: 10px;
-      width: 80%;
-      max-width: 300px;
-      border-radius: 6px;
-      border: none;
-      font-size: 16px;
-      margin-top: 20px;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 10px 25px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background-color: #00bfff;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #009ac1;
-    }
-
-    #resultado {
-      margin-top: 30px;
-      font-size: 18px;
-    }
-
-    a {
-      color: #00bfff;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+  <title>Private</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000010">
 </head>
 <body>
-  <div id="app">
-    <h1>Private</h1>
-    <div class="subtitle">
-      Acceso privado. Puedes obtener una clave única al unirte a nuestro juego en Roblox:<br>
-      <a href="https://www.roblox.com/es/games/98262951659977/Experiment" target="_blank">Unirse al juego</a>
+  <div class="container">
+    <div class="logo">Private</div>
+
+    <div id="contenidoWebapp" style="display: none;">
+      <input type="text" id="claveInput" placeholder="Introduce tu clave única" />
+      <button onclick="verificarClave()">Validar Clave</button>
+      <div id="resultado"></div>
+    </div>
+
+    <div id="instruccionesSafari" style="display: none;">
+      <p>Para acceder a esta sección, añade este sitio a tu pantalla de inicio desde Safari.</p>
+      <p>En Safari, toca el icono <span style="font-size: 1.2em;">📤</span> y elige “Agregar a pantalla de inicio”.</p>
     </div>
   </div>
 
-  <div id="claveApp" class="hidden">
-    <h1>Private</h1>
-    <input type="text" id="claveInput" placeholder="Introduce tu clave única" />
-    <br>
-    <button onclick="verificarClave()">Validar Clave</button>
-    <div id="resultado"></div>
-  </div>
-
   <script>
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    const app = document.getElementById('app');
-    const claveApp = document.getElementById('claveApp');
+    const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-    if (isStandalone) {
-      app.classList.add('hidden');
-      claveApp.classList.remove('hidden');
+    if (isInStandaloneMode) {
+      document.getElementById("contenidoWebapp").style.display = "block";
+    } else {
+      document.getElementById("instruccionesSafari").style.display = "block";
     }
 
     async function verificarClave() {
@@ -114,7 +40,6 @@
 
       if (!clave) {
         resultado.innerText = "Por favor, introduce una clave.";
-        resultado.style.color = "orange";
         return;
       }
 
