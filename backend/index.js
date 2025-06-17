@@ -1,16 +1,15 @@
 const express = require("express");
 const cors = require("cors");
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 
-// Almacenamiento en memoria (cambiar por base de datos si quieres)
-const clavesRegistradas = {}; // { clave: userId }
-const clavesUsadas = {};      // { clave: true }
+const clavesRegistradas = {};
+const clavesUsadas = {};
 
-// Endpoint para registrar la clave enviada desde Roblox
 app.post("/api/registrar-clave", (req, res) => {
   const { userId, clave } = req.body;
 
@@ -19,12 +18,10 @@ app.post("/api/registrar-clave", (req, res) => {
   }
 
   clavesRegistradas[clave] = userId;
-
   console.log(`[+] Clave registrada para ${userId}: ${clave}`);
   res.json({ status: "ok" });
 });
 
-// Endpoint para verificar si una clave es válida y no usada
 app.post("/api/verificar-clave", (req, res) => {
   const { clave } = req.body;
 
@@ -35,8 +32,7 @@ app.post("/api/verificar-clave", (req, res) => {
   const usuarioId = clavesRegistradas[clave];
 
   if (usuarioId && !clavesUsadas[clave]) {
-    clavesUsadas[clave] = true; // marcar como usada para no repetir
-
+    clavesUsadas[clave] = true;
     console.log(`[✓] Clave válida para ${usuarioId}: ${clave}`);
     return res.json({ valida: true });
   }
