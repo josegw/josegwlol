@@ -1,53 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clave - josegw</title>
 
-  <title>secret site</title>
+  <link rel="manifest" href="/hello/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- Apple PWA support -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="apple-mobile-web-app-title" content="josegw" />
+  <style>
+    @font-face {
+      font-family: 'HZMLogo';
+      src: url('../fonts/HZMLogo.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
 
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="styles.css" />
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AA..."> <!-- invisible fallback -->
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #000010 0%, #001050 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h1 {
+      font-family: 'HZMLogo', sans-serif;
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    p.subtitle {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 30px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      margin-top: 20px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      background: transparent;
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px 16px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #0b1a3a 0%, #112454 100%);
+      color: white;
+      cursor: pointer;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    #resultado {
+      margin-top: 30px;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-  <!-- Vista para app instalada -->
-  <div id="main-content" class="container" style="display: none;">
-    <div id="interactive" class="interactive">
-      <img src="img/door.png" alt="door" class="door" />
-    </div>
-  </div>
-
-  <!-- Vista para navegador Safari -->
-  <div id="install-hint" class="container" style="display: none;">
-    <div class="logo">josegw</div>
-    <p class="subtitle">send me a message through here</p>
-    <p class="subtitle">tap the share icon and “Add to Home Screen”</p>
+  <div class="container">
+    <h1>josegw</h1>
+    <p class="subtitle">acceso privado, introduce tu clave</p>
+    <input type="text" id="claveInput" placeholder="Introduce tu clave única">
+    <button onclick="verificarClave()">Validar Clave</button>
+    <div id="resultado"></div>
   </div>
 
   <script>
-    window.onload = () => {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-      document.getElementById("main-content").style.display = isStandalone ? "block" : "none";
-      document.getElementById("install-hint").style.display = isStandalone ? "none" : "flex";
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+      // App instalada: mostrar el contenido
+      document.body.style.display = 'flex';
+    } else {
+      // Safari normal: pedir agregar a pantalla de inicio
+      document.body.innerHTML = `
+        <div class="container">
+          <h1>josegw</h1>
+          <p class="subtitle">para usar esta app, agrégala a tu pantalla de inicio</p>
+          <p style="margin-top: 20px; font-size: 14px; color: rgba(255,255,255,0.8)">Presiona <span style="font-weight: bold">Compartir</span> y luego <span style="font-weight: bold">Agregar a pantalla de inicio</span></p>
+        </div>
+      `;
+    }
 
-      if (isStandalone) {
-        const door = document.querySelector('.door');
-        if (door) {
-          door.addEventListener('click', () => {
-            document.getElementById('interactive').innerHTML = `
-              <div class="secret-text">Welcome to the secret space.</div>
-            `;
-          });
-        }
+    async function verificarClave() {
+      const clave = document.getElementById('claveInput').value.trim();
+      const resultado = document.getElementById('resultado');
+
+      if (!clave) {
+        resultado.innerText = "Por favor, introduce una clave.";
+        resultado.style.color = "orange";
+        return;
       }
-    };
+
+      try {
+        const res = await fetch("https://josegwlol-backend.onrender.com/api/verificar-clave", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ clave })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.valida) {
+          resultado.innerText = "✅ Clave válida. Acceso autorizado.";
+          resultado.style.color = "lightgreen";
+        } else {
+          resultado.innerText = "❌ Clave inválida o ya utilizada.";
+          resultado.style.color = "tomato";
+        }
+      } catch (err) {
+        resultado.innerText = "❌ Error al verificar la clave.";
+        resultado.style.color = "orange";
+        console.error(err);
+      }
+    }
   </script>
 </body>
 </html>
