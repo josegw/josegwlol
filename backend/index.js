@@ -37,7 +37,6 @@ app.post("/api/verificar-clave", (req, res) => {
     return res.json({ valida: true });
   }
 
-  console.log(`[✗] Clave inválida o usada: ${clave}`);
   return res.json({ valida: false });
 });
 
