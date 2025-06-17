@@ -1,42 +1,50 @@
-import express from "express";
-import cors from "cors";
-
+const express = require("express");
+const cors = require("cors");
 const app = express();
-const PORT = process.env.PORT || 10000;
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 
-const clavesValidas = new Map(); // clave => userId
+// Almacenamiento en memoria (cambiar por base de datos si quieres)
+const clavesRegistradas = {}; // { clave: userId }
+const clavesUsadas = {};      // { clave: true }
 
-// 📥 Roblox manda la clave generada
+// Endpoint para registrar la clave enviada desde Roblox
 app.post("/api/registrar-clave", (req, res) => {
-  const { clave, userId } = req.body;
+  const { userId, clave } = req.body;
 
-  if (!clave || !userId) {
-    return res.status(400).json({ error: "Faltan datos clave o userId" });
+  if (!userId || !clave) {
+    return res.status(400).json({ error: "Faltan datos" });
   }
 
-  clavesValidas.set(clave, userId);
+  clavesRegistradas[clave] = userId;
+
   console.log(`[+] Clave registrada para ${userId}: ${clave}`);
-  res.json({ ok: true });
+  res.json({ status: "ok" });
 });
 
-// 🔍 Web consulta si la clave es válida
+// Endpoint para verificar si una clave es válida y no usada
 app.post("/api/verificar-clave", (req, res) => {
   const { clave } = req.body;
 
-  if (!clave || !clavesValidas.has(clave)) {
-    return res.status(400).json({ valido: false, mensaje: "Clave inválida o expirada" });
+  if (!clave) {
+    return res.status(400).json({ valida: false, error: "Falta la clave" });
   }
 
-  const userId = clavesValidas.get(clave);
-  clavesValidas.delete(clave); // 🔐 Borra la clave para que no se reutilice
+  const usuarioId = clavesRegistradas[clave];
 
-  console.log(`[✓] Clave válida para ${userId}: ${clave}`);
-  res.json({ valido: true, userId });
+  if (usuarioId && !clavesUsadas[clave]) {
+    clavesUsadas[clave] = true; // marcar como usada para no repetir
+
+    console.log(`[✓] Clave válida para ${usuarioId}: ${clave}`);
+    return res.json({ valida: true });
+  }
+
+  console.log(`[✗] Clave inválida o usada: ${clave}`);
+  return res.json({ valida: false });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
+app.listen(port, () => {
+  console.log(`Servidor escuchando en puerto ${port}`);
 });
