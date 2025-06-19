@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Private</title>
+  <title>secret site</title>
   <link rel="stylesheet" href="styles.css" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,25 +13,32 @@
   <div class="container">
     <div class="logo">Private</div>
 
-    <div id="contenidoWebapp" style="display: none;">
+    <div id="contenidoWebapp" style="display: none; flex-direction: column; gap: 20px;">
       <input type="text" id="claveInput" placeholder="Introduce tu clave única" />
       <button onclick="verificarClave()">Validar Clave</button>
       <div id="resultado"></div>
     </div>
 
     <div id="instruccionesSafari" style="display: none;">
-      <p>Para acceder a esta sección, añade este sitio a tu pantalla de inicio desde Safari.</p>
-      <p>En Safari, toca el icono <span style="font-size: 1.2em;">📤</span> y elige “Agregar a pantalla de inicio”.</p>
+      <p><strong>Para acceder, añade este sitio a tu pantalla de inicio desde Safari.</strong></p>
+      <p>1. Presiona el botón <span style="font-size: 1.2em;">📤</span> (compartir) en la parte inferior de Safari.</p>
+      <p>2. Desliza hacia abajo y selecciona “Agregar a pantalla de inicio”.</p>
+      <p>3. Abre el acceso directo desde tu pantalla de inicio.</p>
     </div>
   </div>
 
   <script>
     const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
+    const normal = document.getElementById("instruccionesSafari");
+    const app = document.getElementById("contenidoWebapp");
+
     if (isInStandaloneMode) {
-      document.getElementById("contenidoWebapp").style.display = "block";
+      app.style.display = "flex";
+      normal.style.display = "none";
     } else {
-      document.getElementById("instruccionesSafari").style.display = "block";
+      app.style.display = "none";
+      normal.style.display = "block";
     }
 
     async function verificarClave() {
@@ -40,26 +47,30 @@
 
       if (!clave) {
         resultado.innerText = "Por favor, introduce una clave.";
+        resultado.style.color = "orange";
         return;
       }
 
       try {
         const res = await fetch("https://josegwlol-backend.onrender.com/api/verificar-clave", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ clave })
         });
 
         const data = await res.json();
 
         if (res.ok && data.valida) {
-          resultado.innerText = "✅ Clave válida. Acceso autorizado.";
+          let count = 3;
           resultado.style.color = "lightgreen";
-          setTimeout(() => {
-            window.location.href = "extra.html";
-          }, 1500);
+          const countdown = setInterval(() => {
+            resultado.innerText = `✅ Clave válida. Redirigiendo en ${count}...`;
+            count--;
+            if (count < 0) {
+              clearInterval(countdown);
+              window.location.replace("extra.html");
+            }
+          }, 1000);
         } else {
           resultado.innerText = "❌ Clave inválida o ya utilizada.";
           resultado.style.color = "tomato";
