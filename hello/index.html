@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Experiment – tribie2</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="apple-mobile-web-app-title" content="Experiment" />
+  <meta name="theme-color" content="#0f0c29" />
   <style>
     /* === Reset y fondo gradient estilo hazem.gg === */
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -140,7 +141,7 @@
       document.getElementById('mainContent').style.display = 'none';
     }
 
-    // **Cambio clave**: navegamos dentro de la app en lugar de abrir Safari
+    // Navegación dentro de la app
     document.getElementById('experimentImage').addEventListener('click', function() {
       window.location.href = 'https://www.roblox.com/es/games/98262951659977/Experiment';
     });
@@ -173,7 +174,6 @@
             count--;
             if (count < 0) {
               clearInterval(countdown);
-              // también dentro de la app
               window.location.href = "extra.html";
             }
           }, 1000);
