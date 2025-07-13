@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <style>
-/* === Reset y fondo estilo hazem.gg === */
+/* === Fondo hazem.gg === */
 * { margin:0; padding:0; box-sizing:border-box; }
 html, body {
     width:100%; height:100%;
@@ -19,10 +19,8 @@ html, body {
     overflow: hidden;
 }
 
-/* Flecha CSS */
 .arrow {
-    width: 30px;
-    height: 30px;
+    width: 30px; height: 30px;
     border: solid #fff;
     border-width: 0 4px 4px 0;
     display: inline-block;
@@ -49,181 +47,153 @@ html, body {
     margin-top: 20px;
 }
 
-/* === Carta y sobre === */
-h1 {
-    font-family: "Marck Script", cursive;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #fff;
-}
-
+/* Sobre y carta */
 .contenedor {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    width: 300px;
+    height: 250px;
 }
 
 .envoltura-sobre {
     position: relative;
-    width: 300px;
-    height: 250px;
+    width: 100%;
+    height: 100%;
     background-color: #ffe3ed;
     border-radius: 15px;
     box-shadow: 0 0 40px rgba(0,0,0,0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.sobre {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    cursor: pointer;
+    overflow: hidden;
 }
 
 .sobre::before {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0;
-    z-index: 4;
     border-top: 150px solid #ffccd5;
     border-right: 150px solid transparent;
     border-left: 150px solid transparent;
     transform-origin: top;
-    transition: transform 0.5s ease-in-out;
+    transition: transform 1s ease;
     border-radius: 10px;
+    z-index: 2;
 }
 
-.solapa-derecha, .solapa-izquierda {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffc1d1;
-    border-radius: 10px;
-}
-.solapa-derecha { clip-path: polygon(100% 0, 0 100%, 100% 100%); right:0; }
-.solapa-izquierda { clip-path: polygon(0 0, 0 100%, 100% 100%); left:0; }
-
-/* Parte trasera del sobre */
 .parte-atras {
     position: absolute;
     width: 100%;
     height: 100%;
     background-color: #ffc1d1;
     border-radius: 10px;
-    z-index: -1;
+    z-index: 0;
 }
 
-/* Corazón centrado correcto */
 .corazon {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 30px;
-    height: 30px;
+    top: 50%; left: 50%;
+    width: 30px; height: 30px;
     background-color: #ff477e;
     transform: translate(-50%, -50%) rotate(45deg);
     cursor: pointer;
+    z-index: 3;
 }
 .corazon::before,
 .corazon::after {
     content: "";
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 30px; height: 30px;
     background-color: #ff477e;
     border-radius: 50%;
 }
 .corazon::before { top: -15px; left: 0; }
 .corazon::after { top: 0; left: -15px; }
 
+/* Carta */
 .carta {
     position: absolute;
-    width: 90%;
-    height: 90%;
+    width: 90%; height: 80%;
     background: #fff;
     color: #000;
-    text-align: center;
     border-radius: 10px;
     padding: 15px;
     overflow-y: auto;
     font-size: 0.9rem;
     line-height: 1.2rem;
-    transform: translateY(0);
-    transition: transform 0.7s ease-in-out, z-index 0s;
-    z-index: 5;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.8s ease, opacity 0.8s ease;
+    z-index: 4;
 }
+
 .carta.mostrar {
-    transform: translateY(-30%) scale(1.05);
-    z-index: 10;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.05);
+    pointer-events: auto;
 }
 
-.contenido {
-    font-family: "Gill Sans", Calibri, sans-serif;
-    text-align: left;
-    color: #000;
-    max-height: 100%;
-    overflow-y: auto;
+.abierto .sobre::before {
+    transform: rotateX(180deg);
 }
-
-.abierto .sobre::before { transform: rotateX(180deg); }
 </style>
 </head>
 <body>
 
-<!-- Prompt si no está en standalone -->
+<!-- Prompt para apps embebidas -->
 <div id="pwaPrompt" style="display:none;">
     <div class="arrow"></div>
     <p>Por favor da click en el botón de la esquina inferior derecha para abrir en Safari</p>
 </div>
 
-<!-- Carta y sobre -->
+<!-- Contenedor de sobre -->
 <div id="envelopeContainer" style="display:none;">
-    <h1>¡Feliz San Valentín! ❤️</h1>
     <div class="contenedor">
         <div class="envoltura-sobre">
             <div class="parte-atras"></div>
-            <div class="sobre">
-                <div class="carta">
-                    <div class="contenido">
-                        <strong>Querida Estrella</strong>
-                        <p>Hoy es <strong>San Valentín</strong>, el día oficial de los <em>corazones</em>, ...<br>
-                        Con amor ❤️</p>
-                    </div>
+            <div class="sobre"></div>
+            <div class="corazon"></div>
+            <div class="carta">
+                <div>
+                    <strong>Querida Estrella</strong>
+                    <p>Hoy es <strong>San Valentín</strong>, el día oficial de los corazones...</p>
                 </div>
             </div>
-            <div class="corazon"></div>
-            <div class="solapa-derecha"></div>
-            <div class="solapa-izquierda"></div>
         </div>
     </div>
 </div>
 
 <script>
-// Detectar si está en standalone
-if (window.navigator.standalone) {
-    document.getElementById('pwaPrompt').style.display = 'none';
-    document.getElementById('envelopeContainer').style.display = 'block';
-} else {
-    document.getElementById('pwaPrompt').style.display = 'block';
-    document.getElementById('envelopeContainer').style.display = 'none';
+// Detectar apps embebidas (Discord, Instagram, etc.)
+function isEmbeddedApp() {
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    return /FBAN|FBAV|Instagram|Line|Discord|TikTok/i.test(ua);
 }
 
-// Abrir sobre y animar carta
+// Mostrar u ocultar según corresponda
+if (isEmbeddedApp()) {
+    document.getElementById('pwaPrompt').style.display = 'block';
+    document.getElementById('envelopeContainer').style.display = 'none';
+} else {
+    document.getElementById('pwaPrompt').style.display = 'none';
+    document.getElementById('envelopeContainer').style.display = 'block';
+}
+
+// Manejar apertura del sobre
 const envoltura = document.querySelector(".envoltura-sobre");
 const carta = document.querySelector(".carta");
 
 envoltura.addEventListener("click", () => {
-    envoltura.classList.toggle("abierto");
-
-    if (envoltura.classList.contains("abierto")) {
+    if (!envoltura.classList.contains("abierto")) {
+        envoltura.classList.add("abierto");
         setTimeout(() => {
             carta.classList.add("mostrar");
-        }, 600); // esperar a que abra
+        }, 1000); // espera a que abra
     } else {
         carta.classList.remove("mostrar");
+        envoltura.classList.remove("abierto");
     }
 });
 </script>
