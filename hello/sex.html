@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Experiment – Carta</title>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="theme-color" content="#0f0c29">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <style>
 /* === Reset y fondo estilo hazem.gg === */
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -20,30 +19,37 @@ html, body {
     overflow: hidden;
 }
 
-#pwaPrompt, #envelopeContainer {
-    width: 90%; max-width: 360px;
-    text-align: center;
+/* Flecha CSS */
+.arrow {
+    width: 30px;
+    height: 30px;
+    border: solid #fff;
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    padding: 6px;
+    transform: rotate(45deg);
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    animation: bounce 1.2s infinite;
+}
+@keyframes bounce {
+    0%, 100% { transform: rotate(45deg) translate(0,0); }
+    50% { transform: rotate(45deg) translate(-5px,5px); }
 }
 
-/* === Prompt de abrir en Safari real === */
-#pwaPrompt {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+#pwaPrompt, #envelopeContainer {
+    text-align: center;
+    padding: 20px;
 }
-#pwaPrompt img {
-    width: 100px;
-    height: auto;
-    margin-bottom: 20px;
-    filter: invert(1);
-}
+
 #pwaPrompt p {
     font-size: 1.2rem;
     color: #ccc;
+    margin-top: 20px;
 }
 
-/* === Carta === */
+/* === Carta y sobre === */
 h1 {
     font-family: "Marck Script", cursive;
     font-size: 2rem;
@@ -53,7 +59,6 @@ h1 {
 }
 
 .contenedor {
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,9 +66,11 @@ h1 {
 
 .envoltura-sobre {
     position: relative;
-    background-color: rgba(255,255,255,0.05);
-    box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    width: 300px;
+    height: 250px;
+    background-color: #ffe3ed;
     border-radius: 15px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.3);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -71,8 +78,8 @@ h1 {
 
 .sobre {
     position: relative;
-    width: 300px;
-    height: 250px;
+    width: 100%;
+    height: 100%;
 }
 
 .sobre::before {
@@ -84,20 +91,32 @@ h1 {
     border-right: 150px solid transparent;
     border-left: 150px solid transparent;
     transform-origin: top;
-    transition: all 0.5s ease-in-out 0.7s;
+    transition: transform 0.5s ease-in-out;
     border-radius: 10px;
 }
 
 .solapa-derecha, .solapa-izquierda {
     position: absolute;
     top: 0;
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     background-color: #ffc1d1;
     border-radius: 10px;
 }
 .solapa-derecha { clip-path: polygon(100% 0, 0 100%, 100% 100%); right:0; }
 .solapa-izquierda { clip-path: polygon(0 0, 0 100%, 100% 100%); left:0; }
 
+/* Parte trasera del sobre */
+.parte-atras {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #ffc1d1;
+    border-radius: 10px;
+    z-index: -1;
+}
+
+/* Corazón centrado correcto */
 .corazon {
     position: absolute;
     top: 50%;
@@ -106,11 +125,10 @@ h1 {
     height: 30px;
     background-color: #ff477e;
     transform: translate(-50%, -50%) rotate(45deg);
-    transition: transform 0.5s ease-in-out 1s;
-    z-index: 999;
     cursor: pointer;
 }
-.corazon::before, .corazon::after {
+.corazon::before,
+.corazon::after {
     content: "";
     position: absolute;
     width: 30px;
@@ -118,55 +136,61 @@ h1 {
     background-color: #ff477e;
     border-radius: 50%;
 }
-.corazon::before { top: -15px; }
-.corazon::after { left: -15px; }
+.corazon::before { top: -15px; left: 0; }
+.corazon::after { top: 0; left: -15px; }
 
 .carta {
     position: absolute;
-    bottom: 0; width: 100%; height: 100%;
+    width: 90%;
+    height: 90%;
     background: #fff;
     color: #000;
     text-align: center;
     border-radius: 10px;
-    padding: 10px;
+    padding: 15px;
     overflow-y: auto;
     font-size: 0.9rem;
     line-height: 1.2rem;
-    transition: transform 0.5s ease-in-out;
+    transform: translateY(0);
+    transition: transform 0.7s ease-in-out, z-index 0s;
+    z-index: 5;
+}
+.carta.mostrar {
+    transform: translateY(-30%) scale(1.05);
+    z-index: 10;
 }
 
 .contenido {
     font-family: "Gill Sans", Calibri, sans-serif;
     text-align: left;
     color: #000;
+    max-height: 100%;
+    overflow-y: auto;
 }
 
-.abierto .sobre::before { transform: rotateX(180deg); z-index: 0; }
-.abierto .corazon { transform: rotate(90deg); transition-delay: 0.4s; }
-.carta.salida {
-    transform: translateY(-120%);
-}
+.abierto .sobre::before { transform: rotateX(180deg); }
 </style>
 </head>
 <body>
 
-<!-- Prompt Discord u otras apps -->
-<div id="pwaPrompt">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/IPhone_arrow.svg/1200px-IPhone_arrow.svg.png" alt="Flecha">
+<!-- Prompt si no está en standalone -->
+<div id="pwaPrompt" style="display:none;">
+    <div class="arrow"></div>
     <p>Por favor da click en el botón de la esquina inferior derecha para abrir en Safari</p>
 </div>
 
-<!-- Carta -->
+<!-- Carta y sobre -->
 <div id="envelopeContainer" style="display:none;">
     <h1>¡Feliz San Valentín! ❤️</h1>
     <div class="contenedor">
         <div class="envoltura-sobre">
+            <div class="parte-atras"></div>
             <div class="sobre">
                 <div class="carta">
                     <div class="contenido">
                         <strong>Querida Estrella</strong>
-                        <p>Hoy es <strong>San Valentín</strong>...
-                        </p>
+                        <p>Hoy es <strong>San Valentín</strong>, el día oficial de los <em>corazones</em>, ...<br>
+                        Con amor ❤️</p>
                     </div>
                 </div>
             </div>
@@ -178,26 +202,29 @@ h1 {
 </div>
 
 <script>
-// === Detectar entorno ===
-const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-const isInApp = /FBAN|FBAV|Instagram|Discord|Line|Twitter|Snapchat|WhatsApp|Messenger|LinkedIn|TikTok|MicroMessenger/i.test(userAgent);
-const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
-
-if (!isInApp && isSafari) {
+// Detectar si está en standalone
+if (window.navigator.standalone) {
     document.getElementById('pwaPrompt').style.display = 'none';
     document.getElementById('envelopeContainer').style.display = 'block';
 } else {
-    document.getElementById('pwaPrompt').style.display = 'flex';
+    document.getElementById('pwaPrompt').style.display = 'block';
     document.getElementById('envelopeContainer').style.display = 'none';
 }
 
-// === Interactividad carta ===
+// Abrir sobre y animar carta
 const envoltura = document.querySelector(".envoltura-sobre");
 const carta = document.querySelector(".carta");
 
 envoltura.addEventListener("click", () => {
     envoltura.classList.toggle("abierto");
-    carta.classList.toggle("salida");
+
+    if (envoltura.classList.contains("abierto")) {
+        setTimeout(() => {
+            carta.classList.add("mostrar");
+        }, 600); // esperar a que abra
+    } else {
+        carta.classList.remove("mostrar");
+    }
 });
 </script>
 </body>
