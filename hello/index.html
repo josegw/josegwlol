@@ -1,46 +1,133 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>secret site</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Experiment – tribie2</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Experiment" />
   <link rel="stylesheet" href="styles.css" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#000010">
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      color: #fff;
+      font-family: 'Helvetica Neue', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .top-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 500px;
+      height: 25%;
+    }
+    .top-section img {
+      width: 25%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .text-section {
+      flex: 1;
+      margin-left: 15px;
+    }
+    .text-section h1 {
+      font-size: 1.8rem;
+      margin: 0;
+    }
+    .text-section p {
+      font-size: 1rem;
+      margin: 4px 0 0 0;
+      color: #aaa;
+    }
+    .input-section {
+      margin-top: 40px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input[type="text"] {
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #222;
+      color: #fff;
+      outline: none;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 12px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      background: orange;
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+    }
+    #resultado {
+      margin-top: 12px;
+      font-size: 1rem;
+      text-align: center;
+      min-height: 1.2em;
+    }
+    #installPrompt {
+      position: fixed;
+      bottom: 20px;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      max-width: 90%;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">Private</div>
-
-    <div id="contenidoWebapp" style="display: none; flex-direction: column; gap: 20px;">
-      <input type="text" id="claveInput" placeholder="Introduce tu clave única" />
-      <button onclick="verificarClave()">Validar Clave</button>
-      <div id="resultado"></div>
-    </div>
-
-    <div id="instruccionesSafari" style="display: none;">
-      <p><strong>Para acceder, añade este sitio a tu pantalla de inicio desde Safari.</strong></p>
-      <p>1. Presiona el botón <span style="font-size: 1.2em;">📤</span> (compartir) en la parte inferior de Safari.</p>
-      <p>2. Desliza hacia abajo y selecciona “Agregar a pantalla de inicio”.</p>
-      <p>3. Abre el acceso directo desde tu pantalla de inicio.</p>
+  <div class="top-section">
+    <img src="tu-imagen.png" alt="Experiment Icon">
+    <div class="text-section">
+      <h1>Experiment</h1>
+      <p>tribie2</p>
     </div>
   </div>
 
+  <div class="input-section">
+    <input type="text" id="claveInput" placeholder="Introduce la clave">
+    <button onclick="verificarClave()">Validar clave</button>
+    <div id="resultado"></div>
+  </div>
+
+  <div id="installPrompt" style="display:none;">
+    Pulsa <strong>Compartir</strong> y luego <strong>Añadir a Pantalla de inicio</strong> para instalar.
+  </div>
+
   <script>
-    const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    // Mostrar prompt de instalación en Safari iOS
+    const isIOS = /iphone|ipod/.test(navigator.userAgent.toLowerCase());
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-    const normal = document.getElementById("instruccionesSafari");
-    const app = document.getElementById("contenidoWebapp");
-
-    if (isInStandaloneMode) {
-      app.style.display = "flex";
-      normal.style.display = "none";
-    } else {
-      app.style.display = "none";
-      normal.style.display = "block";
+    if (isIOS && isSafari && !window.navigator.standalone) {
+      document.getElementById('installPrompt').style.display = 'block';
     }
+  </script>
 
+  <script>
     async function verificarClave() {
       const clave = document.getElementById('claveInput').value.trim();
       const resultado = document.getElementById('resultado');
