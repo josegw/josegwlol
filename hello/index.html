@@ -140,9 +140,9 @@
       document.getElementById('mainContent').style.display = 'none';
     }
 
-    // Al hacer click en la imagen, abrir el link del juego.
+    // **Cambio clave**: navegamos dentro de la app en lugar de abrir Safari
     document.getElementById('experimentImage').addEventListener('click', function() {
-      window.open('https://www.roblox.com/games/1234567890', '_blank');
+      window.location.href = 'https://www.roblox.com/es/games/98262951659977/Experiment';
     });
 
     // === Tu función EXACTA de validación de claves ===
@@ -173,8 +173,8 @@
             count--;
             if (count < 0) {
               clearInterval(countdown);
-              // redirección sin mostrar barra ni botones
-              window.location.replace("extra.html");
+              // también dentro de la app
+              window.location.href = "extra.html";
             }
           }, 1000);
         } else {
