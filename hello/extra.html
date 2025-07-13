@@ -1,70 +1,52 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Contenido Extra</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#000010" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Verificación – Experiment</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-  <link rel="stylesheet" href="../fonts/HZMLogo.css" />
+  <meta name="apple-mobile-web-app-title" content="Experiment" />
   <style>
-    @font-face {
-      font-family: 'HZMLogo';
-      src: url('../fonts/HZMLogo.woff2') format('woff2');
-    }
-
-    body {
-      background: linear-gradient(135deg, #000010 0%, #001050 100%);
-      color: #ffffff;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body {
+      width:100%; height:100%;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
       text-align: center;
     }
-
-    .logo {
-      font-family: 'HZMLogo', sans-serif;
-      font-size: 42px;
-      margin-bottom: 10px;
+    .container {
+      width: 90%; max-width: 360px;
     }
-
-    .subtitle {
-      font-size: 18px;
-      color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 30px;
-      max-width: 90%;
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
     }
-
-    .content {
-      font-size: 16px;
-      color: #ddd;
-      max-width: 400px;
-      padding: 0 20px;
-    }
-
-    a {
-      color: #80bfff;
-      text-decoration: underline;
-    }
-
-    a:hover {
-      color: #ffffff;
+    #recaptcha-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
     }
   </style>
+  <!-- Cargar reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
-  <div class="logo">josegw</div>
-  <p class="subtitle">¡Acceso concedido! 🎉</p>
-  <div class="content">
-    <p>Bienvenido al contenido exclusivo. Aquí puedes colocar cualquier información, enlaces, secretos, instrucciones o lo que necesites mostrar tras la validación.</p>
-    <p>¿Quieres volver? <a href="index.html">Regresar</a></p>
+  <div class="container">
+    <h1>Verificación de seguridad</h1>
+    <p>Por favor, completa el reCAPTCHA para continuar.</p>
+    <div id="recaptcha-container">
+      <div class="g-recaptcha" data-sitekey="TU_SITE_KEY_AQUI" data-callback="captchaVerificado"></div>
+    </div>
   </div>
+
+  <script>
+    function captchaVerificado() {
+      // Cambia aquí por la URL final a la que quieras redirigir tras validar el captcha
+      window.location.href = "https://www.roblox.com/";
+    }
+  </script>
 </body>
 </html>
