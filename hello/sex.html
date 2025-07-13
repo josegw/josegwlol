@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Experiment – Carta</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#0f0c29">
+<style>
+/* === Reset y fondo estilo hazem.gg === */
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+    width:100%; height:100%;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+#pwaPrompt, #envelopeContainer { width: 90%; max-width: 360px; text-align: center; }
+
+/* === Flecha e instrucciones en PWA === */
+#pwaPrompt {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#pwaPrompt img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 20px;
+}
+#pwaPrompt p {
+    font-size: 1.2rem;
+    color: #ccc;
+}
+
+/* === Carta adaptada con estilo minimal hazem === */
+h1 {
+    font-family: "Marck Script", cursive;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #fff;
+}
+.contenedor {
+    width: 300px;
+}
+.envoltura-sobre {
+    position: relative;
+    background-color: rgba(255,255,255,0.05);
+    box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    border-radius: 15px;
+}
+.sobre {
+    position: relative;
+    width: 300px;
+    height: 250px;
+}
+.sobre::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0; right: 0;
+    z-index: 4;
+    border-top: 150px solid #ffccd5;
+    border-right: 150px solid transparent;
+    border-left: 150px solid transparent;
+    transform-origin: top;
+    transition: all 0.5s ease-in-out 0.7s;
+    border-radius: 10px;
+}
+.solapa-derecha, .solapa-izquierda {
+    position: absolute;
+    top: 0;
+    width: 100%; height: 100%;
+    background-color: #ffc1d1;
+    border-radius: 10px;
+}
+.solapa-derecha { clip-path: polygon(100% 0, 0 100%, 100% 100%); right:0; }
+.solapa-izquierda { clip-path: polygon(0 0, 0 100%, 100% 100%); left:0; }
+.corazon {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 30px; height: 30px;
+    background-color: #ff477e;
+    transform: translate(-50%,0) rotate(45deg);
+    transition: transform 0.5s ease-in-out 1s;
+    z-index: 999;
+    cursor: pointer;
+}
+.corazon::before, .corazon::after {
+    content: "";
+    position: absolute;
+    width: 30px; height: 30px;
+    background-color: #ff477e;
+    border-radius: 50%;
+}
+.corazon::before { top: -15px; }
+.corazon::after { right: 15px; }
+.carta {
+    position: absolute;
+    bottom: 0; width: 100%; height: 100%;
+    background: #fff;
+    color: #000;
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px;
+    overflow-y: scroll;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+    transition: transform 0.5s ease-in-out;
+}
+.contenido {
+    font-family: "Gill Sans", Calibri, sans-serif;
+    text-align: left;
+}
+.abierto .sobre::before { transform: rotateX(180deg); z-index: 0; }
+.abierto .corazon { transform: rotate(90deg); transition-delay: 0.4s; }
+.carta.mostrar-carta { transform: translateY(-240px); }
+.carta.cerrando-carta { transform: translateY(-240px); }
+.carta.abierta { z-index: 10000; }
+.envoltura-sobre.desactivar-sobre .sobre::before { pointer-events: none; }
+</style>
+</head>
+<body>
+
+<!-- Sección PWA -->
+<div id="pwaPrompt">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/IPhone_arrow.svg/1200px-IPhone_arrow.svg.png" alt="Flecha" style="filter: invert(1);">
+    <p>Por favor da click en este botón para abrirlo en Safari</p>
+</div>
+
+<!-- Sección Carta -->
+<div id="envelopeContainer" style="display:none;">
+    <h1>¡Feliz San Valentín! ❤️</h1>
+    <div class="contenedor">
+        <div class="envoltura-sobre">
+            <div class="sobre">
+                <div class="carta">
+                    <div class="contenido">
+                        <strong>Querida Estrella</strong>
+                        <p>Hoy es <strong>San Valentín</strong>, el día oficial de los <em>corazones</em>, el <em>chocolate</em> y las declaraciones de amor dramáticas (como en las telenovelas). Así que prepárate, porque aquí va la mía: Desde que te conocí, mi corazón late más rápido que <code>WiFi</code> gratis en una plaza pública. Eres más brillante que un mensaje de "<strong>te amo</strong>" en <strong>LED gigante</strong> y más dulce que el doble de caramelo en un café con extra de crema. Si fueras un algoritmo, serías el más eficiente: optimizas mi felicidad con la menor cantidad de esfuerzo. Si fueras un bug, serías el único que no querría corregir. Y si fueras una aplicación, serías la que siempre tengo anclada en mi pantalla principal. Gracias por hacer de mi vida una versión mejorada, sin errores (bueno, quizá con algunos, pero todos adorables). <br> <strong>Feliz San Valentín</strong>, mi <em>estrella favorita</em>. <br> Con mucho <strong>código</strong> (y <strong>amor</strong>), <br> Tu programador enamorado. <br> <span style="font-size: 0.9em; color: grey;">PD: Si esta carta fuera un programa, su salida sería:</span> <br> <code>"Eres lo mejor que me ha pasado."</code>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="corazon"></div>
+            <div class="solapa-derecha"></div>
+            <div class="solapa-izquierda"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Mostrar solo flecha en PWA, carta en Safari
+if (window.navigator.standalone) {
+    document.getElementById('pwaPrompt').style.display = 'flex';
+    document.getElementById('envelopeContainer').style.display = 'none';
+} else {
+    document.getElementById('pwaPrompt').style.display = 'none';
+    document.getElementById('envelopeContainer').style.display = 'block';
+}
+
+// Animación carta
+const envoltura = document.querySelector(".envoltura-sobre");
+const carta = document.querySelector(".carta");
+
+document.addEventListener("click", (e) => {
+    if (e.target.matches(".sobre") || 
+        e.target.matches(".solapa-derecha") ||
+        e.target.matches(".solapa-izquierda") ||
+        e.target.matches(".corazon")) {
+        envoltura.classList.toggle("abierto");
+    } else if (e.target.matches(".sobre *")) {
+        if (!carta.classList.contains("abierta")) {
+            carta.classList.add("mostrar-carta");
+            setTimeout(() => {
+                carta.classList.remove("mostrar-carta");
+                carta.classList.add("abierta");
+            }, 500);
+            envoltura.classList.add("desactivar-sobre")
+        } else {
+            carta.classList.add("cerrando-carta");
+            envoltura.classList.remove("desactivar-sobre");
+            setTimeout(() => {
+                carta.classList.remove("cerrando-carta")
+                carta.classList.remove("abierta")
+            }, 500);
+        }
+    }
+});
+</script>
+</body>
+</html>
