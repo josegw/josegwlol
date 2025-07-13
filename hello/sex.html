@@ -19,35 +19,7 @@ html, body {
     overflow: hidden;
 }
 
-.arrow {
-    width: 30px; height: 30px;
-    border: solid #fff;
-    border-width: 0 4px 4px 0;
-    display: inline-block;
-    padding: 6px;
-    transform: rotate(45deg);
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    animation: bounce 1.2s infinite;
-}
-@keyframes bounce {
-    0%, 100% { transform: rotate(45deg) translate(0,0); }
-    50% { transform: rotate(45deg) translate(-5px,5px); }
-}
-
-#pwaPrompt, #envelopeContainer {
-    text-align: center;
-    padding: 20px;
-}
-
-#pwaPrompt p {
-    font-size: 1.2rem;
-    color: #ccc;
-    margin-top: 20px;
-}
-
-/* Sobre y carta */
+/* Contenedor del sobre */
 .contenedor {
     display: flex;
     justify-content: center;
@@ -68,6 +40,7 @@ html, body {
     overflow: hidden;
 }
 
+/* Solapa superior */
 .sobre::before {
     content: "";
     position: absolute;
@@ -81,6 +54,7 @@ html, body {
     z-index: 2;
 }
 
+/* Parte trasera del sobre */
 .parte-atras {
     position: absolute;
     width: 100%;
@@ -90,6 +64,7 @@ html, body {
     z-index: 0;
 }
 
+/* Corazón */
 .corazon {
     position: absolute;
     top: 50%; left: 50%;
@@ -98,6 +73,7 @@ html, body {
     transform: translate(-50%, -50%) rotate(45deg);
     cursor: pointer;
     z-index: 3;
+    transition: transform 1s ease;
 }
 .corazon::before,
 .corazon::after {
@@ -118,7 +94,6 @@ html, body {
     color: #000;
     border-radius: 10px;
     padding: 15px;
-    overflow-y: auto;
     font-size: 0.9rem;
     line-height: 1.2rem;
     top: 50%; left: 50%;
@@ -127,29 +102,28 @@ html, body {
     pointer-events: none;
     transition: transform 0.8s ease, opacity 0.8s ease;
     z-index: 4;
+    overflow-y: auto;
+    max-height: 80%;
 }
 
+/* Animaciones de apertura */
+.abierto .sobre::before {
+    transform: rotateX(180deg);
+}
+.abierto .corazon {
+    transform: translate(-50%, -150%) rotate(45deg);
+}
 .carta.mostrar {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.05);
     pointer-events: auto;
 }
-
-.abierto .sobre::before {
-    transform: rotateX(180deg);
-}
 </style>
 </head>
 <body>
 
-<!-- Prompt para apps embebidas -->
-<div id="pwaPrompt" style="display:none;">
-    <div class="arrow"></div>
-    <p>Por favor da click en el botón de la esquina inferior derecha para abrir en Safari</p>
-</div>
-
 <!-- Contenedor de sobre -->
-<div id="envelopeContainer" style="display:none;">
+<div id="envelopeContainer">
     <div class="contenedor">
         <div class="envoltura-sobre">
             <div class="parte-atras"></div>
@@ -158,7 +132,23 @@ html, body {
             <div class="carta">
                 <div>
                     <strong>Querida Estrella</strong>
-                    <p>Hoy es <strong>San Valentín</strong>, el día oficial de los corazones...</p>
+                    <p>
+                        Hoy es <strong>San Valentín</strong>, el día oficial de los corazones, el chocolate, y las declaraciones de amor dramáticas (como en las telenovelas). Así que prepárate, porque aquí va la mía:
+                        Desde que te conocí, mi corazón late más rápido que WiFi gratis en una plaza pública.
+                        Eres más brillante que un mensaje de "te amo" en LED gigante y más dulce que el doble de caramelo en un café con extra de crema.
+                        Si fueras un algoritmo, serías el más eficiente: optimizas mi felicidad con la menor cantidad de esfuerzo.
+                        Si fueras un bug, serías el único que no querría corregir.
+                        Y si fueras una aplicación, serías la que siempre tengo anclada en mi pantalla principal.
+                        Gracias por hacer de mi vida una versión mejorada, sin errores (bueno, quizá con algunos, pero todos adorables).
+                        <br><br>
+                        <strong>Feliz San Valentín</strong>, mi estrella favorita.
+                        <br>Con mucho código (y amor),
+                        <br>Tu programador enamorado.
+                        <br><span style="font-size: 0.9em; color: grey;">PD: Si esta carta fuera un programa, su salida sería:</span>
+                        <br><code>"Eres lo mejor que me ha pasado."</code>
+                        <br><br>
+                        (Este texto de ejemplo es largo para comprobar el scroll, puedes remplazarlo por el texto real que desees sin preocuparte por cortes.)
+                    </p>
                 </div>
             </div>
         </div>
@@ -166,21 +156,6 @@ html, body {
 </div>
 
 <script>
-// Detectar apps embebidas (Discord, Instagram, etc.)
-function isEmbeddedApp() {
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    return /FBAN|FBAV|Instagram|Line|Discord|TikTok/i.test(ua);
-}
-
-// Mostrar u ocultar según corresponda
-if (isEmbeddedApp()) {
-    document.getElementById('pwaPrompt').style.display = 'block';
-    document.getElementById('envelopeContainer').style.display = 'none';
-} else {
-    document.getElementById('pwaPrompt').style.display = 'none';
-    document.getElementById('envelopeContainer').style.display = 'block';
-}
-
 // Manejar apertura del sobre
 const envoltura = document.querySelector(".envoltura-sobre");
 const carta = document.querySelector(".carta");
@@ -190,7 +165,7 @@ envoltura.addEventListener("click", () => {
         envoltura.classList.add("abierto");
         setTimeout(() => {
             carta.classList.add("mostrar");
-        }, 1000); // espera a que abra
+        }, 1000); // espera a que la solapa abra para mostrar la carta
     } else {
         carta.classList.remove("mostrar");
         envoltura.classList.remove("abierto");
