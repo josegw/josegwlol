@@ -18,17 +18,17 @@
       align-items: center;
       background-color: white;
       font-family: Arial, sans-serif;
-      overflow: hidden; /* Evita scroll al salir del texto */
+      overflow: hidden; /* Evita scroll */
     }
 
     .container {
       writing-mode: vertical-rl;
-      font-size: 10vw;
+      font-size: 20vmin; /* más grande y adaptable a cualquier pantalla */
       font-weight: bold;
       color: black;
       position: absolute;
       animation: floatUp 8s linear infinite;
-      opacity: 0; /* empieza invisible */
+      opacity: 0;
     }
 
     @keyframes floatUp {
@@ -37,17 +37,17 @@
         opacity: 0;
       }
       10% {
-        opacity: 1; /* aparece al empezar a subir */
+        opacity: 1;
       }
       50% {
-        opacity: 1; /* visible mientras está en medio */
+        opacity: 1;
       }
       90% {
         opacity: 1;
       }
       100% {
         transform: translateY(-100vh);
-        opacity: 0; /* desaparece al salir por arriba */
+        opacity: 0;
       }
     }
   </style>
