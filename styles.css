@@ -79,3 +79,12 @@ body {
   .link { font-size: 14px; padding: 12px 14px; }
   .subtitle { font-size: 13px; }
 }
+
+/* iOS Safe Areas (notch & barra inferior) */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
